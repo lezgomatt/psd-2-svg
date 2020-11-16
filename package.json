@@ -1,0 +1,9 @@
+{
+  "name": "psd2svg",
+  "version": "0.1.0",
+  "author": "lezgomatt",
+  "private": true,
+  "dependencies": {
+    "psd": "^3.2.0"
+  }
+}

@@ -2,7 +2,7 @@ var PSD = require('psd');
 var psd = PSD.fromFile(process.argv[2]);
 psd.parse();
 
-var out = ''; 
+var out = '';
 
 var header = psd.tree().psd.header;
 var width = header.width;
@@ -25,7 +25,7 @@ for (var i = 0; i < nodes.length; i++) {
   }
 
   var path = vectorData.export().paths.slice(3); // ignore first 3 records
-  var points = [];  
+  var points = [];
 
   for (var j = 0; j < path.length; j++) {
     p = path[j];
@@ -50,7 +50,7 @@ for (var i = 0; i < nodes.length; i++) {
 
   var startPoint = points.shift();
   points.push(startPoint);
-  
+
   var closed = path[0].closed;
   if (!closed) {
     points.pop();
