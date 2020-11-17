@@ -1,82 +1,82 @@
-var PSD = require('psd');
-var psd = PSD.fromFile(process.argv[2]);
-psd.parse();
+const PSD = require('psd');
 
-var out = '';
+exports.convertFile = convertFile;
+exports.convertToSvg = convertToSvg;
 
-var header = psd.tree().psd.header;
-var width = header.width;
-var height = header.height;
+function convertFile(path) {
+  let psd = PSD.fromFile(path);
 
-out += (
-  '<svg width="' + width + '" height="' + height
-  + '" xmlns="http://www.w3.org/2000/svg">\n'
-);
-
-var nodes = psd.tree().descendants();
-
-for (var i = 0; i < nodes.length; i++) {
-  var node = nodes[i];
-  var layerName = node.get('name');
-  var vectorData = node.get('vectorMask');
-
-  if (!vectorData) {
-    continue;
-  }
-
-  var path = vectorData.export().paths.slice(3); // ignore first 3 records
-  var points = [];
-
-  for (var j = 0; j < path.length; j++) {
-    p = path[j];
-
-    points.push([
-      p.preceding.horiz * width,
-      p.preceding.vert * height,
-    ]);
-
-    points.push([
-      p.anchor.horiz * width,
-      p.anchor.vert * height,
-    ]);
-
-    points.push([
-      p.leaving.horiz * width,
-      p.leaving.vert * height,
-    ]);
-  }
-
-  points.push(points.shift());
-
-  var startPoint = points.shift();
-  points.push(startPoint);
-
-  var closed = path[0].closed;
-  if (!closed) {
-    points.pop();
-    points.pop();
-    points.pop();
-  }
-
-  var pathOut = '';
-  pathOut += 'M' + startPoint[0] + ' ' + startPoint[1];
-  for (var j = 0; j < points.length; j += 3) {
-    pathOut += ' C ' + points[j][0] + ' ' + points[j][1];
-    pathOut += ', ' + points[j+1][0] + ' ' + points[j+1][1];
-    pathOut += ', ' + points[j+2][0] + ' ' + points[j+2][1];
-  }
-
-  if (closed) {
-    pathOut += ' Z';
-  }
-
-  out += (
-    '  <path id="' + layerName.replace(/\s+/, '-') + '" d="' + pathOut
-    + '" stroke="black" fill="transparent"/>\n'
-  );
+  return convertToSvg(psd);
 }
 
-out += '</svg>\n';
-console.log(out);
+function convertToSvg(psd) {
+  psd.parse();
+  let out = '';
 
-// [].slice.apply(document.querySelectorAll('path')).map(el => el.id + ': ' + el.getTotalLength()).join('\n');
+  let header = psd.tree().psd.header;
+  let nodes = psd.tree().descendants();
+
+  let width = header.width;
+  let height = header.height;
+
+  out += `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">` + '\n';
+
+  for (let node of nodes) {
+    // let layerName = node.get('name');
+    let vectorData = node.get('vectorMask');
+
+    if (!vectorData) {
+      continue;
+    }
+
+    let path = vectorData.export().paths.slice(3); // ignore first 3 records
+    let closed = path[0].closed;
+    let points = [];
+
+    for (let p of path) {
+      points.push([
+        p.preceding.horiz * width,
+        p.preceding.vert * height,
+      ]);
+
+      points.push([
+        p.anchor.horiz * width,
+        p.anchor.vert * height,
+      ]);
+
+      points.push([
+        p.leaving.horiz * width,
+        p.leaving.vert * height,
+      ]);
+    }
+
+    points.push(points.shift());
+
+    let startPoint = points.shift();
+    points.push(startPoint);
+
+    if (!closed) {
+      points.pop();
+      points.pop();
+      points.pop();
+    }
+
+    let pathOut = '';
+    pathOut += 'M' + startPoint[0] + ' ' + startPoint[1];
+    for (let i = 0; i < points.length; i += 3) {
+      pathOut += ' C ' + points[i][0] + ' ' + points[i][1];
+      pathOut += ', ' + points[i+1][0] + ' ' + points[i+1][1];
+      pathOut += ', ' + points[i+2][0] + ' ' + points[i+2][1];
+    }
+
+    if (closed) {
+      pathOut += ' Z';
+    }
+
+    out += `  <path d="${pathOut}" stroke="black" fill="transparent"/>` + '\n';
+  }
+
+  out += '</svg>';
+
+  return out;
+}
