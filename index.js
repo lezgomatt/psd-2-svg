@@ -30,53 +30,46 @@ function convertToSvg(psd) {
     }
 
     let path = vectorData.export().paths.slice(3); // ignore first 3 records
-    let closed = path[0].closed;
+    let isClosed = path[0].closed;
     let points = [];
 
     for (let p of path) {
-      points.push([
-        p.preceding.horiz * width,
-        p.preceding.vert * height,
-      ]);
-
-      points.push([
-        p.anchor.horiz * width,
-        p.anchor.vert * height,
-      ]);
-
-      points.push([
-        p.leaving.horiz * width,
-        p.leaving.vert * height,
-      ]);
+      points.push({ x: p.preceding.horiz * width, y: p.preceding.vert * height });
+      points.push({ x: p.anchor.horiz * width, y: p.anchor.vert * height });
+      points.push({ x: p.leaving.horiz * width, y: p.leaving.vert * height });
     }
-
     points.push(points.shift());
 
     let startPoint = points.shift();
     points.push(startPoint);
 
-    if (!closed) {
+    if (!isClosed) {
       points.pop();
       points.pop();
       points.pop();
     }
 
-    let pathOut = '';
-    pathOut += 'M' + startPoint[0] + ' ' + startPoint[1];
-    for (let i = 0; i < points.length; i += 3) {
-      pathOut += ' C ' + points[i][0] + ' ' + points[i][1];
-      pathOut += ', ' + points[i+1][0] + ' ' + points[i+1][1];
-      pathOut += ', ' + points[i+2][0] + ' ' + points[i+2][1];
-    }
-
-    if (closed) {
-      pathOut += ' Z';
-    }
-
-    out += `  <path d="${pathOut}" stroke="black" fill="transparent"/>` + '\n';
+    out += `  <path d="${buildPathCommand(points, startPoint, isClosed)}" stroke="black" fill="transparent"/>` + '\n';
   }
 
   out += '</svg>';
 
   return out;
+}
+
+function buildPathCommand(points, startPoint, isClosed) {
+  let cmd = `M ${pos(startPoint)} `;
+  for (let i = 0; i < points.length; i += 3) {
+    cmd += `C ${pos(points[i])}, ${pos(points[i+1])}, ${pos(points[i+2])} `;
+  }
+
+  if (isClosed) {
+    cmd += 'Z';
+  }
+
+  return cmd;
+}
+
+function pos(point) {
+  return `${point.x} ${point.y}`
 }
