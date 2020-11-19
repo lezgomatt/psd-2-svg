@@ -2,4 +2,4 @@
 
 const { convertFile } = require(".");
 
-console.log(convertFile(process.argv[2]));
+console.log(convertFile(process.argv[2]).toString());

@@ -1,4 +1,5 @@
 const PSD = require('psd');
+const { SVG, PathCommand, Point } = require('./classes');
 
 exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;
@@ -11,15 +12,13 @@ function convertFile(path) {
 
 function convertToSvg(psd) {
   psd.parse();
-  let out = '';
 
   let header = psd.tree().psd.header;
   let nodes = psd.tree().descendants();
 
   let width = header.width;
   let height = header.height;
-
-  out += `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">` + '\n';
+  let svg = new SVG(width, height);
 
   for (let node of nodes) {
     // let layerName = node.get('name');
@@ -34,12 +33,12 @@ function convertToSvg(psd) {
     let points = [];
 
     for (let p of path) {
-      points.push({ x: p.preceding.horiz * width, y: p.preceding.vert * height });
-      points.push({ x: p.anchor.horiz * width, y: p.anchor.vert * height });
-      points.push({ x: p.leaving.horiz * width, y: p.leaving.vert * height });
+      points.push(new Point(p.preceding.horiz * width, p.preceding.vert * height));
+      points.push(new Point(p.anchor.horiz * width, p.anchor.vert * height));
+      points.push(new Point(p.leaving.horiz * width, p.leaving.vert * height));
     }
-    points.push(points.shift());
 
+    points.push(points.shift());
     let startPoint = points.shift();
     points.push(startPoint);
 
@@ -49,27 +48,23 @@ function convertToSvg(psd) {
       points.pop();
     }
 
-    out += `  <path d="${buildPathCommand(points, startPoint, isClosed)}" stroke="black" fill="transparent"/>` + '\n';
+    svg.addPath(buildPathCommand(points, startPoint, isClosed));
   }
 
-  out += '</svg>';
-
-  return out;
+  return svg;
 }
 
 function buildPathCommand(points, startPoint, isClosed) {
-  let cmd = `M ${pos(startPoint)} `;
+  let cmd = new PathCommand();
+  cmd.move(startPoint);
+
   for (let i = 0; i < points.length; i += 3) {
-    cmd += `C ${pos(points[i])}, ${pos(points[i+1])}, ${pos(points[i+2])} `;
+    cmd.cubicCurve(points[i], points[i + 1], points[i + 2]);
   }
 
   if (isClosed) {
-    cmd += 'Z';
+    cmd.close();
   }
 
   return cmd;
-}
-
-function pos(point) {
-  return `${point.x} ${point.y}`
 }
