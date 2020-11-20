@@ -43,9 +43,7 @@ function convertToSvg(psd) {
     points.push(startPoint);
 
     if (!isClosed) {
-      points.pop();
-      points.pop();
-      points.pop();
+      points = points.slice(0, points.length - 3);
     }
 
     svg.addPath(buildPathCommand(points, startPoint, isClosed));

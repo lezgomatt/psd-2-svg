@@ -12,7 +12,7 @@ exports.SVG = class SVG {
 
   toString() {
     let lines = [];
-    lines.push(`<svg width="${this.width}" height="${this.height}" xmlns="http://www.w3.org/2000/svg">`);
+    lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
 
     for (let p of this.paths) {
       lines.push('\t' + `<path d="${p}" stroke="black" fill="transparent"/>`);
