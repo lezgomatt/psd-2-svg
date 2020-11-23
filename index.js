@@ -1,5 +1,7 @@
 const PSD = require('psd');
 const { SVG, PathCommand, Point } = require('./classes');
+const { PathRecordType } = require('./path-record-types');
+const { last, rotate } = require('./utils');
 
 exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;
@@ -23,33 +25,55 @@ function convertToSvg(psd) {
   for (let node of nodes) {
     // let layerName = node.get('name');
     let vectorData = node.get('vectorMask');
-
     if (!vectorData) {
       continue;
     }
 
-    let path = vectorData.export().paths.slice(3); // ignore first 3 records
-    let isClosed = path[0].closed;
-    let points = [];
+    let pathRecords = vectorData.export().paths;
+    for (let i = 0; i < pathRecords.length; i++) {
+      let rec = pathRecords[i];
+      let points = null;
+      let startPoint = null;
 
-    for (let p of path) {
-      points.push(new Point(p.preceding.horiz * width, p.preceding.vert * height));
-      points.push(new Point(p.anchor.horiz * width, p.anchor.vert * height));
-      points.push(new Point(p.leaving.horiz * width, p.leaving.vert * height));
+      switch (rec.recordType) {
+        case PathRecordType.ClosedSubpathLength:
+          points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
+            .map(p => new Point(p.x * width, p.y * height));
+          startPoint = last(points);
+          svg.addPath(buildPathCommand(points, startPoint, true));
+          i += rec.numPoints;
+          break;
+        case PathRecordType.OpenSubpathLength:
+          points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
+            .map(p => new Point(p.x * width, p.y * height));
+          startPoint = last(points);
+          points = points.slice(0, points.length - 3);
+          svg.addPath(buildPathCommand(points, startPoint, false));
+          i += rec.numPoints;
+          break;
+        case PathRecordType.PathFillRule:
+        case PathRecordType.Clipboard:
+        case PathRecordType.InitialFillRule:
+          continue;
+        default:
+          throw new Error('Unexpected path record type: ' + rec.recordType);
+      }
     }
-
-    points.push(points.shift());
-    let startPoint = points.shift();
-    points.push(startPoint);
-
-    if (!isClosed) {
-      points = points.slice(0, points.length - 3);
-    }
-
-    svg.addPath(buildPathCommand(points, startPoint, isClosed));
   }
 
   return svg;
+}
+
+function collectPoints(knots) {
+  let points = [];
+
+  for (let k of knots) {
+    points.push(new Point(k.preceding.horiz, k.preceding.vert));
+    points.push(new Point(k.anchor.horiz, k.anchor.vert));
+    points.push(new Point(k.leaving.horiz, k.leaving.vert));
+  }
+
+  return rotate(points, 2);
 }
 
 function buildPathCommand(points, startPoint, isClosed) {
