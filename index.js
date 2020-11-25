@@ -1,5 +1,5 @@
 const PSD = require('psd');
-const { SVG, PathCommand, Point } = require('./classes');
+const { SVG, Path, PathCommand, Point } = require('./classes');
 const { PathRecordType } = require('./path-record-types');
 const { last, rotate } = require('./utils');
 
@@ -16,20 +16,22 @@ function convertToSvg(psd) {
   psd.parse();
 
   let header = psd.tree().psd.header;
-  let nodes = psd.tree().descendants();
+  let layers = psd.tree().descendants();
 
   let width = header.width;
   let height = header.height;
-  let svg = new SVG(width, height);
+  let paths = [];
 
-  for (let node of nodes) {
-    // let layerName = node.get('name');
-    let vectorData = node.get('vectorMask');
-    if (!vectorData) {
+  for (let layer of layers) {
+    // let layerName = layer.get('name');
+    let vectorMask = layer.get('vectorMask');
+    if (!vectorMask) {
       continue;
     }
 
-    let pathRecords = vectorData.export().paths;
+    let pathRecords = vectorMask.export().paths;
+    let subpaths = [];
+
     for (let i = 0; i < pathRecords.length; i++) {
       let rec = pathRecords[i];
       let points = null;
@@ -40,7 +42,7 @@ function convertToSvg(psd) {
           points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
             .map(p => new Point(p.x * width, p.y * height));
           startPoint = last(points);
-          svg.addPath(buildPathCommand(points, startPoint, true));
+          subpaths.push(buildPathCommand(points, startPoint, true));
           i += rec.numPoints;
           break;
         case PathRecordType.OpenSubpathLength:
@@ -48,7 +50,7 @@ function convertToSvg(psd) {
             .map(p => new Point(p.x * width, p.y * height));
           startPoint = last(points);
           points = points.slice(0, points.length - 3);
-          svg.addPath(buildPathCommand(points, startPoint, false));
+          subpaths.push(buildPathCommand(points, startPoint, false));
           i += rec.numPoints;
           break;
         case PathRecordType.PathFillRule:
@@ -59,9 +61,11 @@ function convertToSvg(psd) {
           throw new Error('Unexpected path record type: ' + rec.recordType);
       }
     }
+
+    paths.push(new Path(subpaths));
   }
 
-  return svg;
+  return new SVG(width, height, paths);
 }
 
 function collectPoints(knots) {

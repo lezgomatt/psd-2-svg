@@ -1,26 +1,32 @@
+const tab = '\t';
+const newline = '\n';
+
 exports.SVG = class SVG {
-  constructor(width, height) {
+  constructor(width, height, paths) {
     this.width = width;
     this.height = height;
-
-    this.paths = [];
-  }
-
-  addPath(pathCommand) {
-    this.paths.push(pathCommand);
+    this.paths = paths;
   }
 
   toString() {
+    const indent = newline + tab + tab;
+
     let lines = [];
     lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
 
     for (let p of this.paths) {
-      lines.push('\t' + `<path d="${p}" stroke="black" fill="transparent"/>`);
+      lines.push(`${tab}<path fill="black" fill-rule="evenodd"${indent}d="${p.subpaths.join(indent)}"/>`);
     }
 
     lines.push('</svg>');
 
     return lines.join('\n');
+  }
+}
+
+exports.Path = class Path {
+  constructor(subpaths) {
+    this.subpaths = subpaths;
   }
 }
 
