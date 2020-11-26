@@ -1,4 +1,4 @@
-exports.rotate = function rotate(arr, numTimes) {
+exports.rotate = function rotate(arr, numTimes = 1) {
   if (arr.length === 0) {
     return [];
   }

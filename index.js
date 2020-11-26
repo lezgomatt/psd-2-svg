@@ -13,19 +13,22 @@ function convertFile(path) {
 }
 
 function convertToSvg(psd) {
-  psd.parse();
+  let ok = psd.parse();
+  if (!ok) {
+    throw new Error('Failed to parse PSD');
+  }
 
   let header = psd.tree().psd.header;
-  let layers = psd.tree().descendants();
-
   let width = header.width;
   let height = header.height;
+
+  let layers = psd.tree().descendants();
   let paths = [];
 
   for (let layer of layers) {
     // let layerName = layer.get('name');
     let vectorMask = layer.get('vectorMask');
-    if (!vectorMask) {
+    if (vectorMask == null) {
       continue;
     }
 
@@ -34,23 +37,13 @@ function convertToSvg(psd) {
 
     for (let i = 0; i < pathRecords.length; i++) {
       let rec = pathRecords[i];
-      let points = null;
-      let startPoint = null;
-
       switch (rec.recordType) {
         case PathRecordType.ClosedSubpathLength:
-          points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
-            .map(p => new Point(p.x * width, p.y * height));
-          startPoint = last(points);
-          subpaths.push(buildPathCommand(points, startPoint, true));
-          i += rec.numPoints;
-          break;
         case PathRecordType.OpenSubpathLength:
-          points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
+          let isClosed = rec.recordType === PathRecordType.ClosedSubpathLength;
+          let points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
             .map(p => new Point(p.x * width, p.y * height));
-          startPoint = last(points);
-          points = points.slice(0, points.length - 3);
-          subpaths.push(buildPathCommand(points, startPoint, false));
+          subpaths.push(buildPathCommand(isClosed, points));
           i += rec.numPoints;
           break;
         case PathRecordType.PathFillRule:
@@ -77,12 +70,17 @@ function collectPoints(knots) {
     points.push(new Point(k.leaving.horiz, k.leaving.vert));
   }
 
-  return rotate(points, 2);
+  return rotate(points);
 }
 
-function buildPathCommand(points, startPoint, isClosed) {
+function buildPathCommand(isClosed, points) {
   let cmd = new PathCommand();
-  cmd.move(startPoint);
+  cmd.move(points[0]);
+
+  points = rotate(points);
+  if (!isClosed) {
+    points = points.slice(0, points.length - 3);
+  }
 
   for (let i = 0; i < points.length; i += 3) {
     cmd.cubicCurve(points[i], points[i + 1], points[i + 2]);
