@@ -1,7 +1,7 @@
 const PSD = require('psd');
 const { SVG, Path, PathCommand, Point } = require('./classes');
 const { PathRecordType } = require('./path-record-types');
-const { last, rotate } = require('./utils');
+const { rotate } = require('./utils');
 
 exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;

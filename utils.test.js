@@ -1,12 +1,4 @@
-const { last, rotate } = require('./utils');
-
-test('last([1]) = 1', () => {
-  expect(last([1])).toBe(1);
-});
-
-test('last([1, 2, 3]) = 3', () => {
-  expect(last([1, 2, 3])).toBe(3);
-});
+const { rotate } = require('./utils');
 
 test('rotate([1, 2, 3], 0) = [1, 2, 3]', () => {
   expect(rotate([1, 2, 3], 0)).toStrictEqual([1, 2, 3]);
