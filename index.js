@@ -26,6 +26,10 @@ function convertToSvg(psd) {
   let paths = [];
 
   for (let layer of layers) {
+    if (!layer.visible()) {
+      continue;
+    }
+
     // let layerName = layer.get('name');
 
     let vectorMask = layer.get('vectorMask');
