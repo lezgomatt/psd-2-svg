@@ -27,38 +27,45 @@ function convertToSvg(psd) {
 
   for (let layer of layers) {
     // let layerName = layer.get('name');
+
     let vectorMask = layer.get('vectorMask');
     if (vectorMask == null) {
       continue;
     }
 
-    let pathRecords = vectorMask.export().paths;
-    let subpaths = [];
-
-    for (let i = 0; i < pathRecords.length; i++) {
-      let rec = pathRecords[i];
-      switch (rec.recordType) {
-        case PathRecordType.ClosedSubpathLength:
-        case PathRecordType.OpenSubpathLength:
-          let isClosed = rec.recordType === PathRecordType.ClosedSubpathLength;
-          let points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
-            .map(p => new Point(p.x * width, p.y * height));
-          subpaths.push(buildPathCommand(isClosed, points));
-          i += rec.numPoints;
-          break;
-        case PathRecordType.PathFillRule:
-        case PathRecordType.Clipboard:
-        case PathRecordType.InitialFillRule:
-          continue;
-        default:
-          throw new Error('Unexpected path record type: ' + rec.recordType);
-      }
-    }
+    let subpaths = getSubpaths(vectorMask, width, height);
 
     paths.push(new Path(subpaths));
   }
 
   return new SVG(width, height, paths);
+}
+
+function getSubpaths(vectorMask, width, height) {
+  let pathRecords = vectorMask.export().paths;
+  let subpaths = [];
+
+  for (let i = 0; i < pathRecords.length; i++) {
+    let rec = pathRecords[i];
+    switch (rec.recordType) {
+      case PathRecordType.ClosedSubpathLength:
+      case PathRecordType.OpenSubpathLength:
+        let isClosed = rec.recordType === PathRecordType.ClosedSubpathLength;
+        let points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
+          .map(p => new Point(p.x * width, p.y * height));
+        subpaths.push(buildPathCommand(isClosed, points));
+        i += rec.numPoints;
+        break;
+      case PathRecordType.PathFillRule:
+      case PathRecordType.Clipboard:
+      case PathRecordType.InitialFillRule:
+        continue;
+      default:
+        throw new Error('Unexpected path record type: ' + rec.recordType);
+    }
+  }
+
+  return subpaths;
 }
 
 function collectPoints(knots) {
