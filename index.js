@@ -22,17 +22,17 @@ function convertToSvg(psd) {
   let width = header.width;
   let height = header.height;
 
-  let layers = psd.tree().descendants();
+  let nodes = psd.tree().descendants();
   let paths = [];
 
-  for (let layer of layers) {
-    if (!layer.visible()) {
+  for (let node of nodes) {
+    if (node.hidden()) {
       continue;
     }
 
-    // let layerName = layer.get('name');
+    // let layerName = node.get('name');
 
-    let vectorMask = layer.get('vectorMask');
+    let vectorMask = node.get('vectorMask');
     if (vectorMask == null) {
       continue;
     }
@@ -46,7 +46,7 @@ function convertToSvg(psd) {
 }
 
 function getSubpaths(vectorMask, width, height) {
-  let pathRecords = vectorMask.export().paths;
+  let pathRecords = vectorMask.paths;
   let subpaths = [];
 
   for (let i = 0; i < pathRecords.length; i++) {
@@ -76,9 +76,9 @@ function collectPoints(knots) {
   let points = [];
 
   for (let k of knots) {
-    points.push(new Point(k.preceding.horiz, k.preceding.vert));
-    points.push(new Point(k.anchor.horiz, k.anchor.vert));
-    points.push(new Point(k.leaving.horiz, k.leaving.vert));
+    points.push(new Point(k.precedingHoriz, k.precedingVert));
+    points.push(new Point(k.anchorHoriz, k.anchorVert));
+    points.push(new Point(k.leavingHoriz, k.leavingVert));
   }
 
   return rotate(points);
