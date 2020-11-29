@@ -7,3 +7,9 @@ exports.rotate = function rotate(arr, numTimes = 1) {
 
   return arr.slice(numTimes).concat(arr.slice(0, numTimes));
 }
+
+exports.roundOff = function roundOff(num, decimalPlaces) {
+  let pow = Math.pow(10, decimalPlaces);
+
+  return Math.floor(Math.round(num * pow)) / pow;
+}

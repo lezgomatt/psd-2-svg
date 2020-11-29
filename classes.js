@@ -15,7 +15,10 @@ exports.SVG = class SVG {
     lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
 
     for (let p of this.paths) {
-      lines.push(`${tab}<path fill="black" fill-rule="evenodd"${indent}d="${p.subpaths.join(indent)}"/>`);
+      lines.push(
+        tab + `<path opacity="${p.opacity}" fill="black" fill-rule="evenodd"`
+        + indent + `d="${p.subpaths.join(indent)}"/>`
+      );
     }
 
     lines.push('</svg>');
@@ -25,8 +28,9 @@ exports.SVG = class SVG {
 }
 
 exports.Path = class Path {
-  constructor(subpaths) {
+  constructor(subpaths, props) {
     this.subpaths = subpaths;
+    this.opacity = props.opacity;
   }
 }
 
