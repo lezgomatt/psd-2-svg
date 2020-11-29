@@ -58,7 +58,7 @@ function getSubpaths(vectorMask, width, height) {
       case PathRecordType.OpenSubpathLength:
         let isClosed = rec.recordType === PathRecordType.ClosedSubpathLength;
         let points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
-          .map(p => new Point(p.x * width, p.y * height));
+          .map(p => new Point(roundOff(p.x * width, 4), roundOff(p.y * height, 4)));
         subpaths.push(buildPathCommand(isClosed, points));
         i += rec.numPoints;
         break;
