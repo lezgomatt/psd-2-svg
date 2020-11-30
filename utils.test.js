@@ -1,4 +1,8 @@
-const { rotate, roundOff } = require('./utils');
+const { reverse, rotate, roundOff } = require('./utils');
+
+test('reverse([1, 2, 3]) = [3, 2, 1]', () => {
+  expect(reverse([1, 2, 3])).toStrictEqual([3, 2, 1]);
+});
 
 test('rotate([1, 2, 3], 0) = [1, 2, 3]', () => {
   expect(rotate([1, 2, 3], 0)).toStrictEqual([1, 2, 3]);
