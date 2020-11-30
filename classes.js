@@ -16,7 +16,7 @@ exports.SVG = class SVG {
 
     for (let p of this.paths) {
       lines.push(
-        tab + `<path opacity="${p.opacity}" fill="black" fill-rule="evenodd"`
+        tab + `<path opacity="${p.opacity}" fill="${p.fill}" fill-rule="evenodd"`
         + indent + `d="${p.subpaths.join(indent)}"/>`
       );
     }
@@ -31,6 +31,7 @@ exports.Path = class Path {
   constructor(subpaths, props) {
     this.subpaths = subpaths;
     this.opacity = props.opacity;
+    this.fill = props.fill;
   }
 }
 
@@ -64,5 +65,19 @@ exports.Point = class Point {
 
   toString() {
     return `${this.x} ${this.y}`;
+  }
+}
+
+exports.Color = class Color {
+  static Black = new Color(0, 0, 0);
+
+  constructor(r, g, b) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+
+  toString() {
+    return `rgb(${this.r}, ${this.g}, ${this.b})`;
   }
 }

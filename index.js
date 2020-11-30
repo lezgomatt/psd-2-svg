@@ -1,5 +1,5 @@
 const PSD = require('psd');
-const { SVG, Path, PathCommand, Point } = require('./classes');
+const { SVG, Path, PathCommand, Point, Color } = require('./classes');
 const { PathRecordType } = require('./path-record-types');
 const { rotate, roundOff } = require('./utils');
 
@@ -41,7 +41,10 @@ function convertToSvg(psd) {
 
     let opacity = roundOff(node.get('opacity') / 255, 2);
 
-    paths.push(new Path(subpaths, { opacity }));
+    let color = node.get('solidColor');
+    let fill = color == null ? Color.Black : new Color(color.r, color.g, color.b);
+
+    paths.push(new Path(subpaths, { opacity, fill }));
   }
 
   return new SVG(width, height, paths);
