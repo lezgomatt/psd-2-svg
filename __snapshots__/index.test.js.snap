@@ -16,6 +16,19 @@ exports[`converts bed 1`] = `
 </svg>"
 `;
 
+exports[`converts layers 1`] = `
+"<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
+	<path opacity=\\"1\\" fill=\\"rgb(49, 238, 134)\\" fill-rule=\\"evenodd\\"
+		d=\\"M296 215 C296 215,396 215,396 215 C396 215,396 315,396 315 C396 315,296 315,296 315 C296 315,296 215,296 215 Z\\"/>
+	<path opacity=\\"1\\" fill=\\"rgb(181, 245, 29)\\" fill-rule=\\"evenodd\\"
+		d=\\"M271 189 C271 189,371 189,371 189 C371 189,371 289,371 289 C371 289,271 289,271 289 C271 289,271 189,271 189 Z\\"/>
+	<path opacity=\\"1\\" fill=\\"rgb(247, 171, 40)\\" fill-rule=\\"evenodd\\"
+		d=\\"M245 161 C245 161,345 161,345 161 C345 161,345 261,345 261 C345 261,245 261,245 261 C245 261,245 161,245 161 Z\\"/>
+	<path opacity=\\"1\\" fill=\\"rgb(38, 116, 246)\\" fill-rule=\\"evenodd\\"
+		d=\\"M220 140 C220 140,320 140,320 140 C320 140,320 240,320 240 C320 240,220 240,220 240 C220 240,220 140,220 140 Z\\"/>
+</svg>"
+`;
+
 exports[`converts like 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
 	<path opacity=\\"1\\" fill=\\"rgb(0, 0, 0)\\" fill-rule=\\"evenodd\\"

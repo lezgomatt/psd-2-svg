@@ -19,3 +19,8 @@ test('converts shapes', () => {
   let svgResult = convertFile('./testdata/shapes.psd').toString();
   expect(svgResult).toMatchSnapshot();
 });
+
+test('converts layers', () => {
+  let svgResult = convertFile('./testdata/layers.psd').toString();
+  expect(svgResult).toMatchSnapshot();
+});
