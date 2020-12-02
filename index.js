@@ -25,11 +25,7 @@ function convertToSvg(psd) {
   let nodes = psd.tree().descendants();
   let paths = [];
 
-  for (let node of nodes) {
-    if (node.hidden()) {
-      continue;
-    }
-
+  for (let node of nodes.filter(n => n.visible())) {
     // let layerName = node.get('name');
 
     let vectorMask = node.get('vectorMask');
