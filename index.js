@@ -26,7 +26,7 @@ function convertToSvg(psd) {
   let paths = [];
 
   for (let node of nodes.filter(n => n.visible())) {
-    // let layerName = node.get('name');
+    let name = node.get('name').trim().replace(/\s+/g, '_');
 
     let vectorMask = node.get('vectorMask');
     if (vectorMask == null) {
@@ -40,7 +40,7 @@ function convertToSvg(psd) {
     let color = node.get('solidColor');
     let fill = color == null ? Color.Black : new Color(color.r, color.g, color.b);
 
-    paths.push(new Path(subpaths, { opacity, fill }));
+    paths.push(new Path(subpaths, { name, opacity, fill }));
   }
 
   return new SVG(width, height, reverse(paths));
