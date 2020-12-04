@@ -19,7 +19,8 @@ exports.SVG = class SVG {
         tab + `<path`
         + ` class="${p.name}"`
         + ` opacity="${p.opacity}"`
-        + ` fill="${p.fill}"`
+        + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
+        + (!p.stroke ? '' : ' stroke="black" stroke-width="1"')
         + ` fill-rule="evenodd"`
         + indent + `d="${p.subpaths.join(indent)}"/>`
       );
@@ -37,6 +38,7 @@ exports.Path = class Path {
     this.name = props.name;
     this.opacity = props.opacity;
     this.fill = props.fill;
+    this.stroke = props.stroke;
   }
 }
 

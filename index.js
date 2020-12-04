@@ -39,8 +39,20 @@ function convertToSvg(psd) {
 
     let color = node.get('solidColor');
     let fill = color == null ? Color.Black : new Color(color.r, color.g, color.b);
+    let stroke = false;
 
-    paths.push(new Path(subpaths, { name, opacity, fill }));
+    let vectorData = node.get('vectorStroke');
+    if (vectorData != null) {
+      if (!vectorData.data.fillEnabled) {
+        fill = null;
+      }
+
+      if (vectorData.data.strokeEnabled) {
+        stroke = true;
+      }
+    }
+
+    paths.push(new Path(subpaths, { name, opacity, fill, stroke }));
   }
 
   return new SVG(width, height, reverse(paths));
