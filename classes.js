@@ -20,7 +20,7 @@ exports.SVG = class SVG {
         + ` class="${p.name}"`
         + ` opacity="${p.opacity}"`
         + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
-        + (!p.stroke ? '' : ' stroke="black" stroke-width="1"')
+        + (p.stroke == null ? '' : ` stroke="${p.stroke}" stroke-width="1"`)
         + ` fill-rule="evenodd"`
         + indent + `d="${p.subpaths.join(indent)}"/>`
       );

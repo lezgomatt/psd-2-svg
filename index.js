@@ -39,7 +39,7 @@ function convertToSvg(psd) {
 
     let color = node.get('solidColor');
     let fill = color == null ? Color.Black : new Color(color.r, color.g, color.b);
-    let stroke = false;
+    let stroke = null;
 
     let vectorData = node.get('vectorStroke');
     if (vectorData != null) {
@@ -48,7 +48,8 @@ function convertToSvg(psd) {
       }
 
       if (vectorData.data.strokeEnabled) {
-        stroke = true;
+        let strokeColor = vectorData.data.strokeStyleContent['Clr '];
+        stroke = new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']);
       }
     }
 
