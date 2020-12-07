@@ -51,7 +51,7 @@ exports[`converts shapes 1`] = `
 
 exports[`converts strokes 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
-	<path class=\\"Shape_1\\" opacity=\\"1\\" fill=\\"transparent\\" stroke=\\"rgb(0, 255, 0)\\" stroke-width=\\"1\\" fill-rule=\\"evenodd\\"
+	<path class=\\"Shape_1\\" opacity=\\"1\\" fill=\\"transparent\\" stroke=\\"rgb(0, 255, 0)\\" stroke-width=\\"1\\" stroke-linejoin=\\"round\\" fill-rule=\\"evenodd\\"
 		d=\\"M259 179 C259 179,409 179,409 179 C409 179,409 329,409 329 C409 329,259 329,259 329 C259 329,259 179,259 179 Z\\"/>
 	<path class=\\"Shape_1_copy\\" opacity=\\"1\\" fill=\\"transparent\\" stroke=\\"rgb(0, 0, 255)\\" stroke-width=\\"1\\" fill-rule=\\"evenodd\\"
 		d=\\"M232 152 C232 152,382 152,382 152 C382 152,382 302,382 302 C382 302,232 302,232 302 C232 302,232 152,232 152 Z\\"/>

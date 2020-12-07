@@ -1,6 +1,5 @@
 // see https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/
 // under "Path records"
-
 exports.PathRecordType = {
   ClosedSubpathLength: 0,
   ClosedSubpathKnotLinked: 1,
@@ -13,4 +12,16 @@ exports.PathRecordType = {
   PathFillRule: 6,
   Clipboard: 7,
   InitialFillRule: 8,
+};
+
+exports.StrokeLineCapType = {
+  Butt: 'strokeStyleButtCap',
+  Round: 'strokeStyleRoundCap',
+  Square: 'strokeStyleSquareCap',
+};
+
+exports.StrokeLineJoinType = {
+  Miter: 'strokeStyleMiterJoin',
+  Round: 'strokeStyleRoundJoin',
+  Bevel: 'strokeStyleBevelJoin',
 };

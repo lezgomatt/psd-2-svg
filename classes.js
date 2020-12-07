@@ -20,7 +20,10 @@ exports.SVG = class SVG {
         + ` class="${p.name}"`
         + ` opacity="${p.opacity}"`
         + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
-        + (p.stroke == null ? '' : ` stroke="${p.stroke}" stroke-width="1"`)
+        + (p.stroke == null ? '' :
+          ` stroke="${p.stroke.color}" stroke-width="1"`
+          + (p.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${p.stroke.lineCap}"`)
+          + (p.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${p.stroke.lineJoin}"`))
         + ` fill-rule="evenodd"`
         + indent + `d="${p.subpaths.join(indent)}"/>`
       );

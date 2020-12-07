@@ -1,6 +1,6 @@
 const PSD = require('psd');
 const { SVG, Path, PathCommand, Point, Color } = require('./classes');
-const { PathRecordType } = require('./path-record-types');
+const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { reverse, rotate, roundOff } = require('./utils');
 
 exports.convertFile = convertFile;
@@ -49,7 +49,11 @@ function convertToSvg(psd) {
 
       if (vectorData.data.strokeEnabled) {
         let strokeColor = vectorData.data.strokeStyleContent['Clr '];
-        stroke = new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']);
+        stroke = {
+          color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
+          lineCap: getLineCap(vectorData.data.strokeStyleLineCapType),
+          lineJoin: getLineJoin(vectorData.data.strokeStyleLineJoinType),
+        };
       }
     }
 
@@ -116,4 +120,30 @@ function buildPathCommand(isClosed, points) {
   }
 
   return cmd;
+}
+
+function getLineCap(capData) {
+  switch (capData.value) {
+    case StrokeLineCapType.Butt:
+      return 'butt';
+    case StrokeLineCapType.Round:
+      return 'round';
+    case StrokeLineCapType.Square:
+      return 'square';
+    default:
+      throw new Error('Unknown stroke line cap type: ' + capData.value);
+  }
+}
+
+function getLineJoin(joinData) {
+  switch (joinData.value) {
+    case StrokeLineJoinType.Miter:
+      return 'miter';
+    case StrokeLineJoinType.Round:
+      return 'round';
+    case StrokeLineJoinType.Bevel:
+      return 'bevel';
+    default:
+      throw new Error('Unknown stroke line join type: ' + joinData.value);
+  }
 }
