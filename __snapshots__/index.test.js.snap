@@ -18,6 +18,8 @@ exports[`converts bed 1`] = `
 
 exports[`converts layers 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
+	<path class=\\"Hidden\\" visibility=\\"hidden\\" opacity=\\"1\\" fill=\\"rgb(115, 46, 240)\\" fill-rule=\\"evenodd\\"
+		d=\\"M321 241 C321 241,421 241,421 241 C421 241,421 341,421 341 C421 341,321 341,321 341 C321 341,321 241,321 241 Z\\"/>
 	<path class=\\"Bottom\\" opacity=\\"1\\" fill=\\"rgb(49, 238, 134)\\" fill-rule=\\"evenodd\\"
 		d=\\"M296 215 C296 215,396 215,396 215 C396 215,396 315,396 315 C396 315,296 315,296 315 C296 315,296 215,296 215 Z\\"/>
 	<path class=\\"Inner\\" opacity=\\"1\\" fill=\\"rgb(181, 245, 29)\\" fill-rule=\\"evenodd\\"

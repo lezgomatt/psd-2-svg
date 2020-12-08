@@ -25,8 +25,9 @@ function convertToSvg(psd) {
   let nodes = psd.tree().descendants();
   let paths = [];
 
-  for (let node of nodes.filter(n => n.visible())) {
+  for (let node of nodes) {
     let name = node.get('name').trim().replace(/\s+/g, '_');
+    let hidden = node.hidden();
 
     let vectorMask = node.get('vectorMask');
     if (vectorMask == null) {
@@ -57,7 +58,7 @@ function convertToSvg(psd) {
       }
     }
 
-    paths.push(new Path(subpaths, { name, opacity, fill, stroke }));
+    paths.push(new Path(subpaths, { name, hidden, opacity, fill, stroke }));
   }
 
   return new SVG(width, height, reverse(paths));

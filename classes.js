@@ -18,10 +18,11 @@ exports.SVG = class SVG {
       lines.push(
         tab + `<path`
         + ` class="${p.name}"`
+        + (!p.hidden ? '' : ' visibility="hidden"')
         + ` opacity="${p.opacity}"`
         + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
         + (p.stroke == null ? '' :
-          ` stroke="${p.stroke.color}" stroke-width="1"`
+          ` stroke="${p.stroke.color}" stroke-width="10"`
           + (p.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${p.stroke.lineCap}"`)
           + (p.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${p.stroke.lineJoin}"`))
         + ` fill-rule="evenodd"`
@@ -39,6 +40,7 @@ exports.Path = class Path {
   constructor(subpaths, props) {
     this.subpaths = subpaths;
     this.name = props.name;
+    this.hidden = props.hidden;
     this.opacity = props.opacity;
     this.fill = props.fill;
     this.stroke = props.stroke;
