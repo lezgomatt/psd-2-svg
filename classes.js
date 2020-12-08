@@ -19,10 +19,10 @@ exports.SVG = class SVG {
         tab + `<path`
         + ` class="${p.name}"`
         + (!p.hidden ? '' : ' visibility="hidden"')
-        + ` opacity="${p.opacity}"`
+        + (p.opacity === 1 ? '' : ` opacity="${p.opacity}"`)
         + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
         + (p.stroke == null ? '' :
-          ` stroke="${p.stroke.color}" stroke-width="10"`
+          ` stroke="${p.stroke.color}" stroke-width="1"`
           + (p.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${p.stroke.lineCap}"`)
           + (p.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${p.stroke.lineJoin}"`))
         + ` fill-rule="evenodd"`
