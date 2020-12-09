@@ -1,7 +1,7 @@
 const PSD = require('psd');
-const { SVG, Path, PathCommand, Point, Color } = require('./classes');
+const { SVG, Path, PathCommand, Point, Color, Group } = require('./classes');
 const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
-const { reverse, rotate, roundOff } = require('./utils');
+const { rotate, roundOff } = require('./utils');
 
 exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;
@@ -22,46 +22,58 @@ function convertToSvg(psd) {
   let width = header.width;
   let height = header.height;
 
-  let nodes = psd.tree().descendants();
-  let paths = [];
+  let nodes = convertNode(psd.tree(), { width, height });
 
-  for (let node of nodes) {
-    let name = node.get('name').trim().replace(/\s+/g, '_');
-    let hidden = node.hidden();
+  return new SVG(width, height, nodes);
+}
 
-    let vectorMask = node.get('vectorMask');
-    if (vectorMask == null) {
-      continue;
-    }
-
-    let subpaths = getSubpaths(vectorMask, width, height);
-
-    let opacity = roundOff(node.get('opacity') / 255, 2);
-
-    let color = node.get('solidColor');
-    let fill = color == null ? Color.Black : new Color(color.r, color.g, color.b);
-    let stroke = null;
-
-    let vectorData = node.get('vectorStroke');
-    if (vectorData != null) {
-      if (!vectorData.data.fillEnabled) {
-        fill = null;
-      }
-
-      if (vectorData.data.strokeEnabled) {
-        let strokeColor = vectorData.data.strokeStyleContent['Clr '];
-        stroke = {
-          color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
-          lineCap: getLineCap(vectorData.data.strokeStyleLineCapType),
-          lineJoin: getLineJoin(vectorData.data.strokeStyleLineJoinType),
-        };
-      }
-    }
-
-    paths.push(new Path(subpaths, { name, hidden, opacity, fill, stroke }));
+function convertNode(node, params) {
+  if (node.isRoot()) {
+    return node.children().map(n => convertNode(n, params)).filter(n => n != null);
   }
 
-  return new SVG(width, height, reverse(paths));
+  let name = node.get('name').trim().replace(/\s+/g, '_');
+  let hidden = node.hidden();
+  let opacity = roundOff(node.get('opacity') / 255, 2);
+
+  if (node.isGroup()) {
+    return new Group(
+      node.children().map(n => convertNode(n, params)).filter(n => n != null),
+      { name, hidden, opacity }
+    );
+  }
+
+  let vectorMask = node.get('vectorMask');
+  if (vectorMask == null) {
+    return null;
+  }
+
+  let vectorData = node.get('vectorStroke');
+  let solidColor = node.get('solidColor');
+
+  let fill = vectorData != null && !vectorData.data.fillEnabled
+    ? null
+    : solidColor == null
+      ? Color.Black
+      : new Color(solidColor.r, solidColor.g, solidColor.b);
+
+  let stroke = vectorData == null || !vectorData.data.strokeEnabled
+    ? null
+    : getStroke(vectorData.data);
+
+  let subpaths = getSubpaths(vectorMask, params.width, params.height);
+
+  return new Path(subpaths, { name, hidden, opacity, fill, stroke });
+}
+
+function getStroke(strokeData) {
+  let strokeColor = strokeData.strokeStyleContent['Clr '];
+
+  return {
+    color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
+    lineCap: getLineCap(strokeData.strokeStyleLineCapType),
+    lineJoin: getLineJoin(strokeData.strokeStyleLineJoinType),
+  };
 }
 
 function getSubpaths(vectorMask, width, height) {

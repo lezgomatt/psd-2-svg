@@ -1,38 +1,41 @@
+const { reverse } = require('./utils');
+
 const tab = '\t';
 const newline = '\n';
 
 exports.SVG = class SVG {
-  constructor(width, height, paths) {
+  constructor(width, height, nodes) {
     this.width = width;
     this.height = height;
-    this.paths = paths;
+    this.nodes = nodes;
   }
 
   toString() {
-    const indent = newline + tab + tab;
-
     let lines = [];
     lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
-
-    for (let p of this.paths) {
-      lines.push(
-        tab + `<path`
-        + ` class="${p.name}"`
-        + (!p.hidden ? '' : ' visibility="hidden"')
-        + (p.opacity === 1 ? '' : ` opacity="${p.opacity}"`)
-        + (p.fill == null ? ' fill="transparent"' : ` fill="${p.fill}"`)
-        + (p.stroke == null ? '' :
-          ` stroke="${p.stroke.color}" stroke-width="1"`
-          + (p.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${p.stroke.lineCap}"`)
-          + (p.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${p.stroke.lineJoin}"`))
-        + ` fill-rule="evenodd"`
-        + indent + `d="${p.subpaths.join(indent)}"/>`
-      );
-    }
-
+    lines = lines.concat(reverse(this.nodes).map(n => n.toString(1)));
     lines.push('</svg>');
 
-    return lines.join('\n');
+    return lines.join(newline);
+  }
+}
+
+exports.Group = class Group {
+  constructor(children, props) {
+    this.children = children;
+    this.name = props.name;
+    this.hidden = props.hidden;
+    this.opacity = props.opacity;
+  }
+
+  toString(numTabs = 0) {
+    return tab.repeat(numTabs) + `<g`
+      + ` class="${this.name}"`
+      + (!this.hidden ? '' : ' visibility="hidden"')
+      + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
+      + '>'
+      + newline + reverse(this.children).map(c => c.toString(numTabs + 1)).join(newline)
+      + newline + tab.repeat(numTabs) + '</g>';
   }
 }
 
@@ -44,6 +47,21 @@ exports.Path = class Path {
     this.opacity = props.opacity;
     this.fill = props.fill;
     this.stroke = props.stroke;
+  }
+
+  toString(numTabs = 0) {
+    return tab.repeat(numTabs) + `<path`
+    + ` class="${this.name}"`
+    + (!this.hidden ? '' : ' visibility="hidden"')
+    + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
+    + (this.fill == null ? ' fill="transparent"' : ` fill="${this.fill}"`)
+    + (this.stroke == null ? '' :
+      ` stroke="${this.stroke.color}" stroke-width="1"`
+      + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
+      + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`))
+    + ` fill-rule="evenodd"`
+    + newline + tab.repeat(numTabs + 1)
+    + `d="${this.subpaths.join(newline + tab.repeat(numTabs + 1))}"/>`
   }
 }
 
