@@ -70,6 +70,7 @@ function getStroke(strokeData) {
   let strokeColor = strokeData.strokeStyleContent['Clr '];
 
   return {
+    width: strokeData.strokeStyleLineWidth.value,
     color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
     lineCap: getLineCap(strokeData.strokeStyleLineCapType),
     lineJoin: getLineJoin(strokeData.strokeStyleLineJoinType),

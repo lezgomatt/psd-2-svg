@@ -56,7 +56,7 @@ exports.Path = class Path {
     + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
     + (this.fill == null ? ' fill="transparent"' : ` fill="${this.fill}"`)
     + (this.stroke == null ? '' :
-      ` stroke="${this.stroke.color}" stroke-width="1"`
+      ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
       + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
       + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`))
     + ` fill-rule="evenodd"`
