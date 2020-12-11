@@ -32,7 +32,7 @@ function convertNode(node, params) {
     return node.children().map(n => convertNode(n, params)).filter(n => n != null);
   }
 
-  let name = node.get('name').trim().replace(/\s+/g, '_');
+  let name = node.get('name').trim().replace(/\s+/g, '_').toLowerCase();
   let hidden = node.hidden();
   let opacity = roundOff(node.get('opacity') / 255, 2);
 
