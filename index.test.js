@@ -29,3 +29,8 @@ test('converts strokes', () => {
   let svgResult = convertFile('./testdata/strokes.psd').toString();
   expect(svgResult).toMatchSnapshot();
 });
+
+test('converts lines', () => {
+  let svgResult = convertFile('./testdata/lines.psd').toString();
+  expect(svgResult).toMatchSnapshot();
+});
