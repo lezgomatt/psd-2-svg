@@ -9,15 +9,15 @@ exports.convertToSvg = convertToSvg;
 function convertFile(path) {
   let psd = PSD.fromFile(path);
 
-  return convertToSvg(psd);
-}
-
-function convertToSvg(psd) {
   let ok = psd.parse();
   if (!ok) {
     throw new Error('Failed to parse PSD');
   }
 
+  return convertToSvg(psd);
+}
+
+function convertToSvg(psd) {
   let header = psd.tree().psd.header;
   let width = header.width;
   let height = header.height;
