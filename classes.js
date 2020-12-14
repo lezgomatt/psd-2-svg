@@ -54,12 +54,12 @@ exports.Path = class Path {
     + ` class="${this.name}"`
     + (!this.hidden ? '' : ' visibility="hidden"')
     + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
-    + (this.fill == null ? ' fill="transparent"' : ` fill="${this.fill}"`)
+    + (this.fill == null ? ' fill="none"' : ` fill="${this.fill}"`)
     + (this.stroke == null ? '' :
       ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
       + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
       + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`))
-    + ` fill-rule="evenodd"`
+    + (this.subpaths.length <= 1 ? '' : ` fill-rule="evenodd"`)
     + newline + tab.repeat(numTabs + 1)
     + `d="${this.subpaths.join(newline + tab.repeat(numTabs + 1))}"/>`
   }
