@@ -7,11 +7,20 @@ document.body.addEventListener('dragover', (event) => {
 
 document.body.addEventListener('drop', (event) => {
     event.preventDefault();
+    let filename = event.dataTransfer.items[0].getAsFile().name;
 
     PSD.fromEvent(event).then(function (psd) {
         let svg = convertToSvg(psd);
-        let img = new Image();
-        img.src = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
-        document.body.appendChild(img);
+        let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
+
+        let preview = document.createElement('img');
+        preview.src = svgDataUrl;
+        document.body.appendChild(preview);
+
+        let downloadLink = document.createElement('a');
+        downloadLink.innerText = 'download';
+        downloadLink.href = svgDataUrl;
+        downloadLink.download = filename + '.svg';
+        document.body.appendChild(downloadLink);
     });
 });
