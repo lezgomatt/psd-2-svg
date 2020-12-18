@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>PSD2SVG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body style="height: 100vh;">
-    <p>Drop your PSDs here</p>
-    <div id="output" hidden>
-        <img id="preview">
-        <a id="download-link">Download</a>
+<body>
+    <div class="container">
+        <div class="app">
+            <h1>PSD2SVG</h1>
+            <p>Drop your PSDs here</p>
+            <div id="output">
+                <img id="preview">
+                <a id="download-link">Download</a>
+            </div>
+        </div>
     </div>
+
     <script src="bundle.js"></script>
 </body>
 </html>
