@@ -7,39 +7,38 @@ html {
 }
 
 body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-height: 100vh;
     margin: 0;
     background: #c4cfdb;
     font-family: sans-serif;
 }
 
-.container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 40px 20px;
-}
-
 .app {
-    background: white;
-    border: 1px solid #acacac;
-    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
+    flex-basis: 420px;
+    margin: 20px;
     padding: 20px;
+    border: 1px solid #acacac;
     border-radius: 10px;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
+    background: white;
     text-align: center;
 }
 
 #preview {
     display: block;
-    object-fit: contain;
     width: 100%;
     height: 320px;
+    object-fit: contain;
     margin: 10px 0;
 }
 
 #download-link {
     display: block;
-    border-radius: 5px;
     padding: 15px 10px;
+    border-radius: 5px;
     background: blue;
     color: white;
     text-decoration: none;
