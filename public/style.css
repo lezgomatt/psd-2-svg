@@ -12,7 +12,8 @@ body {
     justify-content: center;
     min-height: 100vh;
     margin: 0;
-    background: #c4cfdb;
+    background: url('bg.svg') repeat #fbfbfc;
+    background-size: 40px;
     font-family: sans-serif;
 }
 
