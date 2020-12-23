@@ -21,6 +21,10 @@ fileBrowser.addEventListener('change', (event) => {
     });
 });
 
+preview.addEventListener('click', () => {
+    fileBrowser.click();
+});
+
 document.body.addEventListener('dragover', (event) => {
     event.preventDefault();
 });

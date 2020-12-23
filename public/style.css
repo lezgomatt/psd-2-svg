@@ -36,12 +36,17 @@ body {
     text-align: center;
 }
 
+#file-browser {
+    display: none;
+}
+
 #preview {
     display: block;
     width: 100%;
     height: 320px;
     object-fit: contain;
     margin: 10px 0;
+    cursor: pointer;
 }
 
 #download-link {
