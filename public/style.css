@@ -36,7 +36,7 @@ body {
     text-align: center;
 }
 
-#file-browser {
+#file-browser, #download-link {
     display: none;
 }
 
@@ -47,13 +47,4 @@ body {
     object-fit: contain;
     margin: 10px 0;
     cursor: pointer;
-}
-
-#download-link {
-    display: block;
-    padding: 15px 10px;
-    border-radius: 5px;
-    background: blue;
-    color: white;
-    text-decoration: none;
 }

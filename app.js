@@ -5,6 +5,7 @@ let fileBrowser = document.getElementById('file-browser');
 let output = document.getElementById('output');
 let preview = document.getElementById('preview');
 let downloadLink = document.getElementById('download-link');
+let converted = false;
 
 fileBrowser.addEventListener('change', (event) => {
     let file = fileBrowser.files[0];
@@ -17,12 +18,16 @@ fileBrowser.addEventListener('change', (event) => {
         preview.src = svgDataUrl;
         downloadLink.href = svgDataUrl;
         downloadLink.download = filename + '.svg';
-        output.hidden = false;
+        converted = true;
     });
 });
 
 preview.addEventListener('click', () => {
-    fileBrowser.click();
+    if (converted) {
+        downloadLink.click();
+    } else {
+        fileBrowser.click();
+    }
 });
 
 document.body.addEventListener('dragover', (event) => {
@@ -40,6 +45,6 @@ document.body.addEventListener('drop', (event) => {
         preview.src = svgDataUrl;
         downloadLink.href = svgDataUrl;
         downloadLink.download = filename + '.svg';
-        output.hidden = false;
+        converted = true;
     });
 });
