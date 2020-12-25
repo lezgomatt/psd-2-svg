@@ -7,19 +7,8 @@ let preview = document.getElementById('preview');
 let downloadLink = document.getElementById('download-link');
 let converted = false;
 
-fileBrowser.addEventListener('change', (event) => {
-    let file = fileBrowser.files[0];
-    let filename = file.name;
-
-    PSD.fromDroppedFile(file).then(function (psd) {
-        let svg = convertToSvg(psd);
-        let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
-
-        preview.src = svgDataUrl;
-        downloadLink.href = svgDataUrl;
-        downloadLink.download = filename + '.svg';
-        converted = true;
-    });
+fileBrowser.addEventListener('change', () => {
+    convert(fileBrowser.files[0]);
 });
 
 preview.addEventListener('click', () => {
@@ -36,15 +25,16 @@ document.body.addEventListener('dragover', (event) => {
 
 document.body.addEventListener('drop', (event) => {
     event.preventDefault();
-    let filename = event.dataTransfer.items[0].getAsFile().name;
-
-    PSD.fromEvent(event).then(function (psd) {
-        let svg = convertToSvg(psd);
-        let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
-
-        preview.src = svgDataUrl;
-        downloadLink.href = svgDataUrl;
-        downloadLink.download = filename + '.svg';
-        converted = true;
-    });
+    convert(event.dataTransfer.files[0]);
 });
+
+async function convert(file) {
+    let psd = await PSD.fromDroppedFile(file);
+    let svg = convertToSvg(psd);
+    let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
+
+    preview.src = svgDataUrl;
+    downloadLink.href = svgDataUrl;
+    downloadLink.download = file.name + '.svg';
+    converted = true;
+}
