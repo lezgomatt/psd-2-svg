@@ -29,6 +29,11 @@ document.body.addEventListener('drop', (event) => {
 });
 
 async function convert(file) {
+    if (!file.name.endsWith('.psd')) {
+        alert(`Expected a Photoshop document (.psd), got "${file.name}" instead.`);
+        return;
+    }
+
     let psd = await PSD.fromDroppedFile(file);
     let svg = convertToSvg(psd);
     let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
