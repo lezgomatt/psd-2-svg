@@ -2,7 +2,6 @@ import PSD from 'psd';
 import { convertToSvg } from '.';
 
 let fileBrowser = document.getElementById('file-browser');
-let output = document.getElementById('output');
 let preview = document.getElementById('preview');
 let downloadLink = document.getElementById('download-link');
 let converted = false;
