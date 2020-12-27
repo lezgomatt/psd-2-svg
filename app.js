@@ -1,20 +1,27 @@
 import PSD from 'psd';
 import { convertToSvg } from '.';
 
-let fileBrowser = document.getElementById('file-browser');
-let preview = document.getElementById('preview');
-let downloadLink = document.getElementById('download-link');
-let converted = false;
+document.addEventListener('change', (event) => {
+    let fileBrowser = event.target.closest('.file-browser');
+    if (fileBrowser == null) {
+        return;
+    }
 
-fileBrowser.addEventListener('change', () => {
-    convert(fileBrowser.files[0]);
+    let output = fileBrowser.closest('.output');
+    convert(fileBrowser.files[0], output);
 });
 
-preview.addEventListener('click', () => {
-    if (converted) {
-        downloadLink.click();
+document.addEventListener('click', (event) => {
+    let preview = event.target.closest('.preview');
+    if (preview == null) {
+        return;
+    }
+
+    let output = preview.closest('.output');
+    if (output.dataset.converted) {
+        output.querySelector('.download-link').click();
     } else {
-        fileBrowser.click();
+        output.querySelector('.file-browser').click();
     }
 });
 
@@ -24,10 +31,10 @@ document.body.addEventListener('dragover', (event) => {
 
 document.body.addEventListener('drop', (event) => {
     event.preventDefault();
-    convert(event.dataTransfer.files[0]);
+    convert(event.dataTransfer.files[0], document.querySelector('.output'));
 });
 
-async function convert(file) {
+async function convert(file, output) {
     if (!file.name.endsWith('.psd')) {
         alert(`Expected a Photoshop document (.psd), got "${file.name}" instead.`);
         return;
@@ -37,8 +44,11 @@ async function convert(file) {
     let svg = convertToSvg(psd);
     let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
 
+    let preview = output.querySelector('.preview');
+    let downloadLink = output.querySelector('.download-link');
+
     preview.src = svgDataUrl;
     downloadLink.href = svgDataUrl;
     downloadLink.download = file.name + '.svg';
-    converted = true;
+    output.dataset.converted = true;
 }

@@ -26,7 +26,7 @@ body {
     color: #282828;
 }
 
-#output {
+.output {
     margin: 20px 0;
     padding: 20px;
     border: 1px solid #acacac;
@@ -36,11 +36,11 @@ body {
     text-align: center;
 }
 
-#file-browser, #download-link {
+.file-browser, .download-link {
     display: none;
 }
 
-#preview {
+.preview {
     display: block;
     width: 100%;
     height: 320px;
