@@ -1,6 +1,9 @@
 import PSD from 'psd';
 import { convertToSvg } from '.';
 
+let app = document.querySelector('.app');
+let template = document.getElementById('output-template');
+
 document.addEventListener('change', (event) => {
     let fileBrowser = event.target.closest('.file-browser');
     if (fileBrowser == null) {
@@ -51,4 +54,13 @@ async function convert(file, output) {
     downloadLink.href = svgDataUrl;
     downloadLink.download = file.name + '.svg';
     output.dataset.converted = true;
+
+    addOutput();
 }
+
+function addOutput() {
+    let copy = template.content.cloneNode(true);
+    app.appendChild(copy);
+}
+
+addOutput();

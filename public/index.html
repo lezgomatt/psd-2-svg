@@ -9,11 +9,14 @@
 <body>
     <div class="app">
         <h1>PSD Shapes to SVG</h1>
-        <div class="output">
-            <img class="preview">
-            <input class="file-browser" type="file" accept=".psd">
-            <a class="download-link">Download</a>
-        </div>
+
+        <template id="output-template">
+            <div class="output">
+                <img class="preview">
+                <input class="file-browser" type="file" accept=".psd">
+                <a class="download-link">Download</a>
+            </div>
+        </template>
     </div>
 
     <script src="bundle.js"></script>
