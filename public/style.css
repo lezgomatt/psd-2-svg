@@ -18,7 +18,7 @@ body {
 }
 
 .app {
-    flex-basis: 420px;
+    flex-basis: 320px;
     text-align: center;
 }
 
@@ -28,7 +28,7 @@ body {
 
 .output {
     margin: 20px 0;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #acacac;
     border-radius: 10px;
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
@@ -42,9 +42,9 @@ body {
 
 .preview {
     display: block;
-    width: 100%;
-    height: 320px;
+    width: 240px;
+    height: 240px;
     object-fit: contain;
-    margin: 10px 0;
+    margin: 0 auto;
     cursor: pointer;
 }
