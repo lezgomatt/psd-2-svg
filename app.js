@@ -1,7 +1,7 @@
 import PSD from 'psd';
 import { convertToSvg } from '.';
 
-let app = document.querySelector('.app');
+let outputContainer = document.getElementById('output-container');
 let template = document.getElementById('output-template');
 
 document.addEventListener('change', (event) => {
@@ -60,7 +60,7 @@ async function convert(file, output) {
 
 function addOutput() {
     let copy = template.content.cloneNode(true);
-    app.appendChild(copy);
+    outputContainer.appendChild(copy);
 }
 
 addOutput();
