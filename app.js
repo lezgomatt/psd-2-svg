@@ -25,7 +25,7 @@ document.body.addEventListener('dragover', (event) => {
 
 document.body.addEventListener('drop', (event) => {
     event.preventDefault();
-    convert(event.dataTransfer.files[0], document.querySelector('.output'));
+    convert(event.dataTransfer.files[0]);
 });
 
 async function convert(file) {
