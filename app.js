@@ -5,8 +5,10 @@ let fileBrowser = document.querySelector('.file-browser');
 let outputContainer = document.getElementById('output-container');
 let template = document.getElementById('output-template');
 
-fileBrowser.addEventListener('change', (event) => {
-    convert(fileBrowser.files[0]);
+fileBrowser.addEventListener('change', async () => {
+    for (let file of fileBrowser.files) {
+        await convert(file);
+    }
 });
 
 document.addEventListener('click', (event) => {
@@ -23,9 +25,11 @@ document.body.addEventListener('dragover', (event) => {
     event.preventDefault();
 });
 
-document.body.addEventListener('drop', (event) => {
+document.body.addEventListener('drop', async (event) => {
     event.preventDefault();
-    convert(event.dataTransfer.files[0]);
+    for (let file of event.dataTransfer.files) {
+        await convert(file);
+    }
 });
 
 async function convert(file) {
