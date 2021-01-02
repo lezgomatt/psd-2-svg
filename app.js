@@ -2,6 +2,7 @@ import PSD from 'psd';
 import { convertToSvg } from '.';
 
 let fileBrowser = document.querySelector('.file-browser');
+let selectButton = document.querySelector('.select-button');
 let outputContainer = document.getElementById('output-container');
 let template = document.getElementById('output-template');
 
@@ -9,6 +10,10 @@ fileBrowser.addEventListener('change', async () => {
     for (let file of fileBrowser.files) {
         await convert(file);
     }
+});
+
+selectButton.addEventListener('click', () => {
+    fileBrowser.click();
 });
 
 document.addEventListener('click', (event) => {

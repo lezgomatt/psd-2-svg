@@ -42,7 +42,7 @@ body {
     text-align: center;
 }
 
-.download-link {
+.download-link, .file-browser {
     display: none;
 }
 
