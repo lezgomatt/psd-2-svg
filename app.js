@@ -17,6 +17,16 @@ selectButton.addEventListener('click', () => {
 });
 
 document.addEventListener('click', (event) => {
+    let removeButton = event.target.closest('.remove-button');
+    if (removeButton == null) {
+        return;
+    }
+
+    let output = removeButton.closest('.output');
+    output.remove();
+});
+
+document.addEventListener('click', (event) => {
     let preview = event.target.closest('.preview');
     if (preview == null) {
         return;
