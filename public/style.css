@@ -33,6 +33,7 @@ body {
 }
 
 .output {
+    position: relative;
     margin: 10px;
     padding: 10px;
     border: 1px solid #dcdcdc;
@@ -44,6 +45,28 @@ body {
 
 .download-link, .file-browser {
     display: none;
+}
+
+.remove-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.65);
+    color: white;
+    opacity: 0;
+    font-weight: bold;
+}
+
+.output:hover .remove-button {
+    opacity: 0.4;
+}
+
+.output:hover .remove-button:hover {
+    opacity: 1;
 }
 
 .preview {
