@@ -43,7 +43,7 @@ body {
     text-align: center;
 }
 
-.download-link, .file-browser {
+.file-browser {
     display: none;
 }
 
@@ -55,18 +55,12 @@ body {
     height: 20px;
     border: none;
     border-radius: 20px;
-    background: rgba(0, 0, 0, 0.65);
-    color: white;
     opacity: 0;
+    background:#CC0000;
+    color: white;
+    font-size: 10px;
     font-weight: bold;
-}
-
-.output:hover .remove-button {
-    opacity: 0.4;
-}
-
-.output:hover .remove-button:hover {
-    opacity: 1;
+    cursor: pointer;
 }
 
 .preview {
@@ -75,5 +69,23 @@ body {
     height: 240px;
     object-fit: contain;
     margin: 0 auto;
-    cursor: pointer;
+}
+
+.download-area {
+    margin-top: -30px;
+    height: 30px;
+}
+
+.download-link {
+    padding: 7px 15px 5px;
+    border-radius: 20px;
+    opacity: 0;
+    background:#00AA00;
+    color: white;
+    text-decoration: none;
+}
+
+.output:hover .remove-button,
+.output:hover .download-link {
+    opacity: 1;
 }

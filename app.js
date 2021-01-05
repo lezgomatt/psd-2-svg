@@ -26,16 +26,6 @@ document.addEventListener('click', (event) => {
     output.remove();
 });
 
-document.addEventListener('click', (event) => {
-    let preview = event.target.closest('.preview');
-    if (preview == null) {
-        return;
-    }
-
-    let output = preview.closest('.output');
-    output.querySelector('.download-link').click();
-});
-
 document.body.addEventListener('dragover', (event) => {
     event.preventDefault();
 });
