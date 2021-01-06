@@ -1,10 +1,5 @@
-html {
-    box-sizing: border-box;
-}
-
-*, *:before, *:after {
-    box-sizing: inherit;
-}
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
 
 body {
     display: flex;
@@ -17,12 +12,16 @@ body {
     font-family: sans-serif;
 }
 
-.app {
-    text-align: center;
-}
+.app { text-align: center; }
+h1 { color: #404040; }
+.psd { color: #0054e4; }
+.svg { color: #f07000; }
 
-.app h1 {
-    color: #282828;
+.two {
+    display: inline-block;
+    margin: 0 -4px;
+    transform: rotate(4deg) translateY(2px);
+    font-size: 40px;
 }
 
 #output-container {
