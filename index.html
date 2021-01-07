@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PSD 2 SVG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <h1>
+            <span class="psd">PSD</span><span class="two">2</span><span class="svg">SVG</span>
+        </h1>
+        <input class="file-browser" type="file" accept=".psd" multiple>
+        <button class="select-button">Select PSD files</button>
+
+        <div id="output-container">
+            <template id="output-template">
+                <div class="output">
+                    <button class="remove-button">X</button>
+                    <img class="preview">
+                    <div class="download-area">
+                        <a class="download-link">Download</a>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <script src="bundle.js"></script>
+</body>
+</html>

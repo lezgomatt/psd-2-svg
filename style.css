@@ -1,0 +1,90 @@
+html { box-sizing: border-box; }
+*, *:before, *:after { box-sizing: inherit; }
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #fafbfd;
+    background-size: 40px;
+    font-family: sans-serif;
+}
+
+.app { text-align: center; }
+h1 { color: #404040; }
+.psd { color: #0054e4; }
+.svg { color: #f07000; }
+
+.two {
+    display: inline-block;
+    margin: 0 -4px;
+    transform: rotate(4deg) translateY(2px);
+    font-size: 40px;
+}
+
+#output-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.output {
+    position: relative;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.1);
+    background: white;
+    text-align: center;
+}
+
+.file-browser {
+    display: none;
+}
+
+.remove-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 20px;
+    opacity: 0;
+    background:#CC0000;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.preview {
+    display: block;
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.download-area {
+    margin-top: -30px;
+    height: 30px;
+}
+
+.download-link {
+    padding: 7px 15px 5px;
+    border-radius: 20px;
+    opacity: 0;
+    background:#00AA00;
+    color: white;
+    text-decoration: none;
+}
+
+.output:hover .remove-button,
+.output:hover .download-link {
+    opacity: 1;
+}
