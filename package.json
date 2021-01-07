@@ -2,6 +2,8 @@
   "name": "psd-2-svg",
   "version": "0.1.0",
   "author": "lezgomatt",
+  "license": "Zlib",
+  "repository": "github:lezgomatt/psd-2-svg",
   "private": true,
   "scripts": {
     "build": "esbuild app.js --bundle --minify --outfile=public/bundle.js",
