@@ -13,7 +13,12 @@ body {
 }
 
 .app { text-align: center; }
-h1 { color: #404040; }
+
+h1 {
+    margin: 0 0 5px;
+    color: #404040;
+}
+
 .psd { color: #0054e4; }
 .svg { color: #f07000; }
 
