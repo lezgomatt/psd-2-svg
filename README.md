@@ -4,6 +4,8 @@ A utility for converting (a subset of) PSD documents into SVG.
 
 [Test it out »](https://lezgomatt.github.io/psd-2-svg/)
 
+Or get it on npm: `npm install -g psd-2-svg` or `yarn global add psd-2-svg`
+
 ## Features
 
 ### Supported
