@@ -12,8 +12,29 @@ exports.SVG = class SVG {
 
   toString() {
     let lines = [];
+    let defs = [];
+    let body = [];
+
+    // reversed because PSD and SVG have opposite layer ordering
+    let nodes = reverse(this.nodes);
+    for (let { defs: newDefs, node } of nodes.map(n => n.transform())) {
+      if (newDefs != null) {
+        defs = defs.concat(newDefs);
+      }
+
+      body.push(node);
+    }
+
     lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
-    lines = lines.concat(reverse(this.nodes).map(n => n.toString(1)));
+
+    if (defs.length > 0) {
+      lines.push('<defs>');
+      lines = lines.concat(defs.map(d => d.toString()));
+      lines.push('</defs>');
+    }
+
+    lines = lines.concat(body.map(n => n.toString(1)));
+
     lines.push('</svg>');
 
     return lines.join(newline);
@@ -26,6 +47,10 @@ exports.Group = class Group {
     this.name = props.name;
     this.hidden = props.hidden;
     this.opacity = props.opacity;
+  }
+
+  transform() {
+    return { node: this };
   }
 
   toString(numTabs = 0) {
@@ -47,6 +72,10 @@ exports.Path = class Path {
     this.opacity = props.opacity;
     this.fill = props.fill;
     this.stroke = props.stroke;
+  }
+
+  transform() {
+    return { node: this };
   }
 
   toString(numTabs = 0) {
