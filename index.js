@@ -1,5 +1,5 @@
 const PSD = require('psd');
-const { SVG, Path, PathCommand, Point, Color, Group } = require('./classes');
+const { SVG, Path, PathDefinition, Point, Color, Group } = require('./classes');
 const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { rotate, roundOff } = require('./utils');
 
@@ -89,7 +89,7 @@ function getSubpaths(vectorMask, width, height) {
         let isClosed = rec.recordType === PathRecordType.ClosedSubpathLength;
         let points = collectPoints(pathRecords.slice(i + 1, i + 1 + rec.numPoints))
           .map(p => new Point(roundOff(p.x * width, 4), roundOff(p.y * height, 4)));
-        subpaths.push(buildPathCommand(isClosed, points));
+        subpaths.push(buildPathDefinition(isClosed, points));
         i += rec.numPoints;
         break;
       case PathRecordType.PathFillRule:
@@ -116,9 +116,9 @@ function collectPoints(knots) {
   return rotate(points);
 }
 
-function buildPathCommand(isClosed, points) {
-  let cmd = new PathCommand();
-  cmd.move(points[0]);
+function buildPathDefinition(isClosed, points) {
+  let def = new PathDefinition();
+  def.move(points[0]);
 
   points = rotate(points);
   if (!isClosed) {
@@ -126,14 +126,14 @@ function buildPathCommand(isClosed, points) {
   }
 
   for (let i = 0; i < points.length; i += 3) {
-    cmd.cubicCurve(points[i], points[i + 1], points[i + 2]);
+    def.cubicCurve(points[i], points[i + 1], points[i + 2]);
   }
 
   if (isClosed) {
-    cmd.close();
+    def.close();
   }
 
-  return cmd;
+  return def;
 }
 
 function getLineCap(capData) {

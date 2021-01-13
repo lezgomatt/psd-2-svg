@@ -94,25 +94,42 @@ exports.Path = class Path {
   }
 }
 
-exports.PathCommand = class PathCommand {
+exports.PathDefinition = class PathDefinition {
   constructor() {
     this.commands = [];
   }
 
   move(p) {
-    this.commands.push(`M${p}`);
+    this.commands.push(new PathCommand('M', p));
+
+    return this;
   }
 
   cubicCurve(p1, p2, p3) {
-    this.commands.push(`C${p1},${p2},${p3}`);
+    this.commands.push(new PathCommand('C', p1, p2, p3));
+
+    return this;
   }
 
   close() {
-    this.commands.push('Z');
+    this.commands.push(new PathCommand('Z'));
+
+    return this;
   }
 
   toString() {
     return this.commands.join(' ');
+  }
+}
+
+class PathCommand {
+  constructor(operator, ...points) {
+    this.operator = operator;
+    this.operands = points;
+  }
+
+  toString() {
+    return `${this.operator}` + this.operands.join(',');
   }
 }
 
