@@ -1,7 +1,7 @@
 const Psd = require('psd');
 const { Svg, Path, PathDefinition, Point, Color, Group } = require('./classes');
 const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
-const { rotate, roundOff } = require('./utils');
+const { reverse, rotate, roundOff } = require('./utils');
 
 exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;
@@ -29,7 +29,7 @@ function convertToSvg(psd) {
 
 function convertNode(node, params) {
   if (node.isRoot()) {
-    return node.children().map(n => convertNode(n, params)).filter(n => n != null);
+    return convertChildren(node.children(), params);
   }
 
   let name = node.get('name').trim().replace(/\s+/g, '_').toLowerCase();
@@ -38,7 +38,7 @@ function convertNode(node, params) {
 
   if (node.isGroup()) {
     return new Group(
-      node.children().map(n => convertNode(n, params)).filter(n => n != null),
+      convertChildren(node.children(), params),
       { name, hidden, opacity }
     );
   }
@@ -64,6 +64,13 @@ function convertNode(node, params) {
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
   return new Path(subpaths, { name, hidden, opacity, fill, stroke });
+}
+
+function convertChildren(children, params) {
+  let nodes = children.map(n => convertNode(n, params)).filter(n => n != null);
+
+  // reverse because PSD and SVG have opposite layer ordering
+  return reverse(nodes);
 }
 
 function getStroke(strokeData) {

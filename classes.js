@@ -1,5 +1,3 @@
-const { reverse } = require('./utils');
-
 const tab = '\t';
 const newline = '\n';
 
@@ -15,9 +13,7 @@ exports.Svg = class Svg {
     let defs = [];
     let body = [];
 
-    // reversed because PSD and SVG have opposite layer ordering
-    let nodes = reverse(this.nodes);
-    for (let { defs: newDefs, node } of nodes.map(n => n.transform())) {
+    for (let { defs: newDefs, node } of this.nodes.map(n => n.transform())) {
       if (newDefs != null) {
         defs = defs.concat(newDefs);
       }
@@ -59,7 +55,7 @@ exports.Group = class Group {
       + (!this.hidden ? '' : ' visibility="hidden"')
       + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
       + '>'
-      + newline + reverse(this.children).map(c => c.toString(numTabs + 1)).join(newline)
+      + newline + this.children.map(c => c.toString(numTabs + 1)).join(newline)
       + newline + tab.repeat(numTabs) + '</g>';
   }
 }
