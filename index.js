@@ -1,5 +1,5 @@
-const PSD = require('psd');
-const { SVG, Path, PathDefinition, Point, Color, Group } = require('./classes');
+const Psd = require('psd');
+const { Svg, Path, PathDefinition, Point, Color, Group } = require('./classes');
 const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { rotate, roundOff } = require('./utils');
 
@@ -7,7 +7,7 @@ exports.convertFile = convertFile;
 exports.convertToSvg = convertToSvg;
 
 function convertFile(path) {
-  let psd = PSD.fromFile(path);
+  let psd = Psd.fromFile(path);
 
   let ok = psd.parse();
   if (!ok) {
@@ -24,7 +24,7 @@ function convertToSvg(psd) {
 
   let nodes = convertNode(psd.tree(), { width, height });
 
-  return new SVG(width, height, nodes);
+  return new Svg(width, height, nodes);
 }
 
 function convertNode(node, params) {

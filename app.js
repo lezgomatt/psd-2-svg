@@ -1,4 +1,4 @@
-import PSD from 'psd';
+import Psd from 'psd';
 import { convertToSvg } from '.';
 
 let fileBrowser = document.querySelector('.file-browser');
@@ -43,7 +43,7 @@ async function convert(file) {
         return;
     }
 
-    let psd = await PSD.fromDroppedFile(file);
+    let psd = await Psd.fromDroppedFile(file);
     let svg = convertToSvg(psd);
     let svgDataUrl = 'data:image/svg+xml,' + window.encodeURI(svg.toString());
 

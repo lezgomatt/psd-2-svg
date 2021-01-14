@@ -3,7 +3,7 @@ const { reverse } = require('./utils');
 const tab = '\t';
 const newline = '\n';
 
-exports.SVG = class SVG {
+exports.Svg = class Svg {
   constructor(width, height, nodes) {
     this.width = width;
     this.height = height;
