@@ -14,6 +14,12 @@ exports.PathRecordType = {
   InitialFillRule: 8,
 };
 
+exports.StrokeLineAlignment = {
+  Center: 'strokeStyleAlignCenter',
+  Inside: 'strokeStyleAlignInside',
+  Outside: 'strokeStyleAlignOutside',
+}
+
 exports.StrokeLineCapType = {
   Butt: 'strokeStyleButtCap',
   Round: 'strokeStyleRoundCap',

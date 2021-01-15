@@ -1,6 +1,6 @@
 const Psd = require('psd');
 const { Svg, Path, PathDefinition, Point, Color, Group } = require('./classes');
-const { PathRecordType, StrokeLineCapType, StrokeLineJoinType } = require('./types');
+const { PathRecordType, StrokeLineAlignment, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { reverse, rotate, roundOff } = require('./utils');
 
 exports.convertFile = convertFile;
@@ -79,6 +79,7 @@ function getStroke(strokeData) {
   return {
     width: strokeData.strokeStyleLineWidth.value,
     color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
+    alignment: getStrokeAlignment(strokeData.strokeStyleLineAlignment),
     lineCap: getLineCap(strokeData.strokeStyleLineCapType),
     lineJoin: getLineJoin(strokeData.strokeStyleLineJoinType),
   };
@@ -141,6 +142,19 @@ function buildPathDefinition(isClosed, points) {
   }
 
   return def;
+}
+
+function getStrokeAlignment(alignData) {
+  switch (capData.value) {
+    case StrokeLineAlignment.Center:
+      return 'center';
+    case StrokeLineAlignment.Inside:
+      return 'outside';
+    case StrokeLineAlignment.Outside:
+      return 'inside';
+    default:
+      throw new Error('Unknown stroke alignment: ' + alignData.value);
+  }
 }
 
 function getLineCap(capData) {
