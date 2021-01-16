@@ -145,7 +145,7 @@ function buildPathDefinition(isClosed, points) {
 }
 
 function getStrokeAlignment(alignData) {
-  switch (capData.value) {
+  switch (alignData.value) {
     case StrokeLineAlignment.Center:
       return 'center';
     case StrokeLineAlignment.Inside:
