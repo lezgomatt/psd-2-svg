@@ -3,9 +3,9 @@
 const fs = require('fs');
 const { convertFile } = require('.');
 
-const usage = 'Usage: psd-2-svg <psd-file> <svg-output>';
+const usage = 'Usage: psd-2-svg <psd-file> [svg-output]';
 
-if (process.argv.length !== 4) {
+if (process.argv.length < 3 || process.argv.length > 4) {
     return console.error(usage);
 }
 
@@ -15,9 +15,15 @@ if (!fs.existsSync(psdPath)) {
 }
 
 let svgPath = process.argv[3];
-if (fs.existsSync(svgPath)) {
-    return console.error('File already exists: ' + svgPath);
-}
 
-let output = convertFile(psdPath).toString();
-fs.writeFileSync(svgPath, output);
+if (svgPath != null) {
+    if (fs.existsSync(svgPath)) {
+        return console.error('File already exists: ' + svgPath);
+    }
+
+    let output = convertFile(psdPath).toString();
+    fs.writeFileSync(svgPath, output);
+} else {
+    let output = convertFile(psdPath).toString();
+    console.log(output);
+}
