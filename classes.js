@@ -51,7 +51,7 @@ exports.Group = class Group {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<g`
-      + ` class="${this.name}"`
+      + ` id="${this.name}"`
       + (!this.hidden ? '' : ' visibility="hidden"')
       + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
       + '>'
@@ -76,7 +76,7 @@ exports.Path = class Path {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<path`
-    + ` class="${this.name}"`
+    + ` id="${this.name}"`
     + (!this.hidden ? '' : ' visibility="hidden"')
     + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
     + (this.fill == null ? ' fill="none"' : ` fill="${this.fill}"`)

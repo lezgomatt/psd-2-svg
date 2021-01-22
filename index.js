@@ -22,14 +22,15 @@ function convertToSvg(psd) {
   let width = header.width;
   let height = header.height;
 
-  let nodes = convertNode(psd.tree(), { width, height });
+  let state = new ConversionState();
+  let nodes = convertNode(psd.tree(), state, { width, height });
 
   return new Svg(width, height, nodes);
 }
 
-function convertNode(node, params) {
+function convertNode(node, state, params) {
   if (node.isRoot()) {
-    return convertChildren(node.children(), params);
+    return convertChildren(node.children(), state, params);
   }
 
   let name = node.get('name').trim().replace(/\s+/g, '_').toLowerCase();
@@ -37,9 +38,10 @@ function convertNode(node, params) {
   let opacity = roundOff(node.get('opacity') / 255, 2);
 
   if (node.isGroup()) {
+    state.groupCount++;
     return new Group(
-      convertChildren(node.children(), params),
-      { name, hidden, opacity }
+      convertChildren(node.children(), state, params),
+      { name: `G${state.groupCount}_${name}`, hidden, opacity }
     );
   }
 
@@ -63,14 +65,22 @@ function convertNode(node, params) {
 
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
-  return new Path(subpaths, { name, hidden, opacity, fill, stroke });
+  state.layerCount++;
+  return new Path(subpaths, { name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke });
 }
 
-function convertChildren(children, params) {
-  let nodes = children.map(n => convertNode(n, params)).filter(n => n != null);
+function convertChildren(children, state, params) {
+  let nodes = [];
 
   // reverse because PSD and SVG have opposite layer ordering
-  return reverse(nodes);
+  for (let n of reverse(children)) {
+    let result = convertNode(n, state, params);
+    if (result != null) {
+      nodes.push(result);
+    }
+  }
+
+  return nodes;
 }
 
 function getStroke(strokeData) {
@@ -180,5 +190,12 @@ function getLineJoin(joinData) {
       return 'bevel';
     default:
       throw new Error('Unknown stroke line join type: ' + joinData.value);
+  }
+}
+
+class ConversionState {
+  constructor() {
+    this.layerCount = 0;
+    this.groupCount = 0;
   }
 }
