@@ -1,5 +1,5 @@
 const Psd = require('psd');
-const { Svg, Path, PathDefinition, Point, Color, Group } = require('./classes');
+const { Svg, Path, PathDefinition, Point, Color, Group, GenericElement } = require('./classes');
 const { PathRecordType, StrokeLineAlignment, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { reverse, rotate, roundOff } = require('./utils');
 
@@ -65,8 +65,36 @@ function convertNode(node, state, params) {
 
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
-  state.layerCount++;
-  return new Path(subpaths, { name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke });
+  if (stroke == null || stroke.alignment === 'center') {
+    state.layerCount++;
+    return new Path(subpaths, { name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke });
+  } else if (stroke.alignment === 'inside') {
+    state.layerCount++;
+    state.maskCount++;
+
+    let maskId = `M${state.maskCount}_inner_stroke_mask`;
+    let newStroke = Object.assign(stroke, { width: stroke.width * 2 } );
+
+    let elems = [
+      new GenericElement('defs', {}, [
+        new GenericElement('mask', { id: maskId }, [
+          new Path(subpaths, { fill: Color.White }),
+        ]),
+      ]),
+      new Path(subpaths, { stroke: newStroke, mask: maskId }),
+    ];
+
+    if (fill != null) {
+      elems.push(new Path(subpaths, { fill }));
+    }
+
+    return new Group(elems, { name: `L${state.layerCount}_${name}`, hidden, opacity });
+  } else if (stroke.alignment === 'outside') {
+    // TODO
+    return null;
+  } else {
+    throw new Error('Unknown stroke alignment: ' + stroke.alignment);
+  }
 }
 
 function convertChildren(children, state, params) {
@@ -159,9 +187,9 @@ function getStrokeAlignment(alignData) {
     case StrokeLineAlignment.Center:
       return 'center';
     case StrokeLineAlignment.Inside:
-      return 'outside';
-    case StrokeLineAlignment.Outside:
       return 'inside';
+    case StrokeLineAlignment.Outside:
+      return 'outside';
     default:
       throw new Error('Unknown stroke alignment: ' + alignData.value);
   }
@@ -197,5 +225,6 @@ class ConversionState {
   constructor() {
     this.layerCount = 0;
     this.groupCount = 0;
+    this.maskCount = 0;
   }
 }

@@ -68,6 +68,7 @@ exports.Path = class Path {
     this.opacity = props.opacity;
     this.fill = props.fill;
     this.stroke = props.stroke;
+    this.mask = props.mask;
   }
 
   transform() {
@@ -76,14 +77,15 @@ exports.Path = class Path {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<path`
-    + ` id="${this.name}"`
+    + (this.name == null ? '' : ` id="${this.name}"`)
     + (!this.hidden ? '' : ' visibility="hidden"')
-    + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
+    + (this.opacity == null || this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
     + (this.fill == null ? ' fill="none"' : ` fill="${this.fill}"`)
     + (this.stroke == null ? '' :
       ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
       + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
       + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`))
+    + (this.mask == null ? '' : ` mask="url(#${this.mask})"`)
     + (this.subpaths.length <= 1 ? '' : ` fill-rule="evenodd"`)
     + newline + tab.repeat(numTabs + 1)
     + `d="${this.subpaths.join(newline + tab.repeat(numTabs + 1))}"/>`
@@ -174,6 +176,7 @@ exports.Point = class Point {
 
 exports.Color = class Color {
   static Black = new Color(0, 0, 0);
+  static White = new Color(255, 255, 255);
 
   constructor(r, g, b) {
     this.r = r;
