@@ -129,6 +129,38 @@ class PathCommand {
   }
 }
 
+exports.GenericElement = class GenericElement {
+  constructor(name, attrs, children) {
+    this.name = name;
+    this.attrs = attrs;
+    this.children = children;
+  }
+
+  transform() {
+    return { node: this };
+  }
+
+  strAttrs() {
+      let list = [];
+
+      for (const [key, value] of Object.entries(this.attrs)) {
+        list.push(`${key}="${value}"`);
+      }
+
+      return list.length <= 0 ? '' : ' ' + list.join(' ');
+  }
+
+  toString(numTabs = 0) {
+    if (this.children == null) {
+      return tab.repeat(numTabs) + `<${this.name}${this.strAttrs()}/>`;
+    }
+
+    return tab.repeat(numTabs) + `<${this.name}${this.strAttrs()}>`
+      + newline + this.children.map(c => c.toString(numTabs + 1)).join(newline)
+      + newline + tab.repeat(numTabs) + `</${this.name}>`;
+  }
+}
+
 exports.Point = class Point {
   constructor(x, y) {
     this.x = x;
