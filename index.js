@@ -90,8 +90,27 @@ function convertNode(node, state, params) {
 
     return new Group(elems, { name: `L${state.layerCount}_${name}`, hidden, opacity });
   } else if (stroke.alignment === 'outside') {
-    // TODO
-    return null;
+    state.layerCount++;
+    state.maskCount++;
+
+    let maskId = `M${state.maskCount}_outer_stroke_mask`;
+    let newStroke = Object.assign(stroke, { width: stroke.width * 2 } );
+
+    let elems = [
+      new GenericElement('defs', {}, [
+        new GenericElement('mask', { id: maskId }, [
+          new GenericElement('rect', { width: params.width, height: params.height, fill: Color.White }),
+          new Path(subpaths, { fill: Color.Black }),
+        ]),
+      ]),
+      new Path(subpaths, { stroke: newStroke, mask: maskId }),
+    ];
+
+    if (fill != null) {
+      elems.push(new Path(subpaths, { fill }));
+    }
+
+    return new Group(elems, { name: `L${state.layerCount}_${name}`, hidden, opacity });
   } else {
     throw new Error('Unknown stroke alignment: ' + stroke.alignment);
   }
