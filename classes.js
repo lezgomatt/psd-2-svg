@@ -10,27 +10,9 @@ exports.Svg = class Svg {
 
   toString() {
     let lines = [];
-    let defs = [];
-    let body = [];
-
-    for (let { defs: newDefs, node } of this.nodes.map(n => n.transform())) {
-      if (newDefs != null) {
-        defs = defs.concat(newDefs);
-      }
-
-      body.push(node);
-    }
 
     lines.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${this.width}" height="${this.height}">`);
-
-    if (defs.length > 0) {
-      lines.push('<defs>');
-      lines = lines.concat(defs.map(d => d.toString()));
-      lines.push('</defs>');
-    }
-
-    lines = lines.concat(body.map(n => n.toString(1)));
-
+    lines = lines.concat(this.nodes.map(n => n.toString(1)));
     lines.push('</svg>');
 
     return lines.join(newline);
@@ -43,10 +25,6 @@ exports.Group = class Group {
     this.name = props.name;
     this.hidden = props.hidden;
     this.opacity = props.opacity;
-  }
-
-  transform() {
-    return { node: this };
   }
 
   toString(numTabs = 0) {
@@ -69,10 +47,6 @@ exports.Path = class Path {
     this.fill = props.fill;
     this.stroke = props.stroke;
     this.mask = props.mask;
-  }
-
-  transform() {
-    return { node: this };
   }
 
   toString(numTabs = 0) {
@@ -136,10 +110,6 @@ exports.GenericElement = class GenericElement {
     this.name = name;
     this.attrs = attrs;
     this.children = children;
-  }
-
-  transform() {
-    return { node: this };
   }
 
   strAttrs() {
