@@ -20,7 +20,6 @@ Or get it on npm: `npm install -g psd-2-svg` or `yarn global add psd-2-svg`
 - Clipping masks
 - Layer effects
 - Layer blending modes
-- Non-center stroke positions
 - Text (convert it to a shape instead)
 - Raster elements (like images)
 
