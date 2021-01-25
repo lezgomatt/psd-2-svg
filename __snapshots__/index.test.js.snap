@@ -20,7 +20,7 @@ exports[`converts layers 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
 	<path id=\\"L1_hidden\\" visibility=\\"hidden\\" fill=\\"rgb(115, 46, 240)\\"
 		d=\\"M321 241 C321 241,421 241,421 241 C421 241,421 341,421 341 C421 341,321 341,321 341 C321 341,321 241,321 241 Z\\"/>
-	<g id=\\"G2_folder\\">
+	<g id=\\"G1_folder\\">
 		<path id=\\"L2_bottom\\" fill=\\"rgb(49, 238, 134)\\"
 			d=\\"M296 215 C296 215,396 215,396 215 C396 215,396 315,396 315 C396 315,296 315,296 315 C296 315,296 215,296 215 Z\\"/>
 		<g id=\\"G2_nested\\">
@@ -48,7 +48,7 @@ exports[`converts lines 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
 	<path id=\\"L1_water\\" fill=\\"rgb(0, 0, 255)\\" stroke=\\"rgb(0, 0, 0)\\" stroke-width=\\"20\\"
 		d=\\"M210 293 C210 293,309 407,430 293\\"/>
-	<g id=\\"G3_land\\" opacity=\\"0.7\\">
+	<g id=\\"G1_land\\" opacity=\\"0.7\\">
 		<g id=\\"G2_half_visible\\" opacity=\\"0.7\\">
 			<path id=\\"L2_line\\" opacity=\\"0.98\\" fill=\\"rgb(0, 0, 255)\\" stroke=\\"rgb(0, 0, 0)\\" stroke-width=\\"20\\"
 				d=\\"M133 258 C133 258,507.0053 258,507.0053 258\\"/>

@@ -38,10 +38,10 @@ function convertNode(node, state, params) {
   let opacity = roundOff(node.get('opacity') / 255, 2);
 
   if (node.isGroup()) {
-    state.groupCount++;
+    let groupNum = ++state.groupCount;
     let children = convertChildren(node.children(), state, params);
 
-    return new Group({ name: `G${state.groupCount}_${name}`, hidden, opacity }, children);
+    return new Group({ name: `G${groupNum}_${name}`, hidden, opacity }, children);
   }
 
   let vectorMask = node.get('vectorMask');
@@ -49,6 +49,7 @@ function convertNode(node, state, params) {
     return null;
   }
 
+  let layerNum = ++state.layerCount;
   let vectorData = node.get('vectorStroke');
   let solidColor = node.get('solidColor');
 
@@ -65,11 +66,9 @@ function convertNode(node, state, params) {
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
   if (stroke == null || stroke.alignment === 'center') {
-    state.layerCount++;
 
-    return new Path({ name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke }, subpaths);
+    return new Path({ name: `L${layerNum}_${name}`, hidden, opacity, fill, stroke }, subpaths);
   } else if (stroke.alignment === 'inside') {
-    state.layerCount++;
     state.maskCount++;
 
     let maskId = `M${state.maskCount}_inner_stroke_mask`;
@@ -88,9 +87,8 @@ function convertNode(node, state, params) {
       elems.push(new Path({ fill }, subpaths));
     }
 
-    return new Group({ name: `L${state.layerCount}_${name}`, hidden, opacity }, elems);
+    return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else if (stroke.alignment === 'outside') {
-    state.layerCount++;
     state.maskCount++;
 
     let maskId = `M${state.maskCount}_outer_stroke_mask`;
@@ -110,7 +108,7 @@ function convertNode(node, state, params) {
       elems.push(new Path({ fill }, subpaths));
     }
 
-    return new Group({ name: `L${state.layerCount}_${name}`, hidden, opacity }, elems);
+    return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else {
     throw new Error('Unknown stroke alignment: ' + stroke.alignment);
   }
