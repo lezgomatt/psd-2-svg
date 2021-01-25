@@ -39,10 +39,9 @@ function convertNode(node, state, params) {
 
   if (node.isGroup()) {
     state.groupCount++;
-    return new Group(
-      convertChildren(node.children(), state, params),
-      { name: `G${state.groupCount}_${name}`, hidden, opacity }
-    );
+    let children = convertChildren(node.children(), state, params);
+
+    return new Group({ name: `G${state.groupCount}_${name}`, hidden, opacity }, children);
   }
 
   let vectorMask = node.get('vectorMask');
@@ -67,7 +66,8 @@ function convertNode(node, state, params) {
 
   if (stroke == null || stroke.alignment === 'center') {
     state.layerCount++;
-    return new Path(subpaths, { name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke });
+
+    return new Path({ name: `L${state.layerCount}_${name}`, hidden, opacity, fill, stroke }, subpaths);
   } else if (stroke.alignment === 'inside') {
     state.layerCount++;
     state.maskCount++;
@@ -78,17 +78,17 @@ function convertNode(node, state, params) {
     let elems = [
       new GenericElement('defs', {}, [
         new GenericElement('mask', { id: maskId }, [
-          new Path(subpaths, { fill: Color.White }),
+          new Path({ fill: Color.White }, subpaths),
         ]),
       ]),
-      new Path(subpaths, { stroke: newStroke, mask: maskId }),
+      new Path({ stroke: newStroke, mask: maskId }, subpaths),
     ];
 
     if (fill != null) {
-      elems.push(new Path(subpaths, { fill }));
+      elems.push(new Path({ fill }, subpaths));
     }
 
-    return new Group(elems, { name: `L${state.layerCount}_${name}`, hidden, opacity });
+    return new Group({ name: `L${state.layerCount}_${name}`, hidden, opacity }, elems);
   } else if (stroke.alignment === 'outside') {
     state.layerCount++;
     state.maskCount++;
@@ -100,17 +100,17 @@ function convertNode(node, state, params) {
       new GenericElement('defs', {}, [
         new GenericElement('mask', { id: maskId }, [
           new GenericElement('rect', { width: params.width, height: params.height, fill: Color.White }),
-          new Path(subpaths, { fill: Color.Black }),
+          new Path({ fill: Color.Black }, subpaths),
         ]),
       ]),
-      new Path(subpaths, { stroke: newStroke, mask: maskId }),
+      new Path({ stroke: newStroke, mask: maskId }, subpaths),
     ];
 
     if (fill != null) {
-      elems.push(new Path(subpaths, { fill }));
+      elems.push(new Path({ fill }, subpaths));
     }
 
-    return new Group(elems, { name: `L${state.layerCount}_${name}`, hidden, opacity });
+    return new Group({ name: `L${state.layerCount}_${name}`, hidden, opacity }, elems);
   } else {
     throw new Error('Unknown stroke alignment: ' + stroke.alignment);
   }

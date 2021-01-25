@@ -20,7 +20,7 @@ exports.Svg = class Svg {
 }
 
 exports.Group = class Group {
-  constructor(children, props) {
+  constructor(props, children) {
     this.children = children;
     this.name = props.name;
     this.hidden = props.hidden;
@@ -39,7 +39,7 @@ exports.Group = class Group {
 }
 
 exports.Path = class Path {
-  constructor(subpaths, props) {
+  constructor(props, subpaths) {
     this.subpaths = subpaths;
     this.name = props.name;
     this.hidden = props.hidden;
