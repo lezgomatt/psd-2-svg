@@ -58,7 +58,8 @@ exports.Path = class Path {
     + (this.stroke == null ? '' :
       ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
       + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
-      + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`))
+      + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`)
+      + (this.stroke.dash == null ? '' : ` stroke-dasharray="${this.stroke.dash.join(',')}"`))
     + (this.mask == null ? '' : ` mask="url(#${this.mask})"`)
     + (this.subpaths.length <= 1 ? '' : ` fill-rule="evenodd"`)
     + newline + tab.repeat(numTabs + 1)

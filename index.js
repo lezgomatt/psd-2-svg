@@ -132,13 +132,16 @@ function convertChildren(children, state, params) {
 
 function getStroke(strokeData) {
   let strokeColor = strokeData.strokeStyleContent['Clr '];
+  let strokeWidth = strokeData.strokeStyleLineWidth.value;
+  let strokeDash = strokeData.strokeStyleLineDashSet.map(dash => dash.value * strokeWidth);
 
   return {
-    width: strokeData.strokeStyleLineWidth.value,
+    width: strokeWidth,
     color: new Color(strokeColor['Rd  '], strokeColor['Grn '], strokeColor['Bl  ']),
     alignment: getStrokeAlignment(strokeData.strokeStyleLineAlignment),
     lineCap: getLineCap(strokeData.strokeStyleLineCapType),
     lineJoin: getLineJoin(strokeData.strokeStyleLineJoinType),
+    dash: strokeDash.length <= 0 ? null : strokeDash,
   };
 }
 

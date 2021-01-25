@@ -11,12 +11,11 @@ Or get it on npm: `npm install -g psd-2-svg` or `yarn global add psd-2-svg`
 ### Supported
 - Vector shapes
 - Solid strokes and fills
-- Stroke caps and corners
+- Stroke alignment, caps, corners, and dashes
 - Layer opacity and visibility
 
 ### Not Supported
 - Gradients
-- Strokes dashes
 - Clipping masks
 - Layer effects
 - Layer blending modes
