@@ -54,7 +54,7 @@ exports.Path = class Path {
     + (this.name == null ? '' : ` id="${this.name}"`)
     + (!this.hidden ? '' : ' visibility="hidden"')
     + (this.opacity == null || this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
-    + (this.fill == null ? ' fill="none"' : ` fill="${this.fill}"`)
+    + (this.fill == null ? '' : ` fill="${this.fill}"`)
     + (this.stroke == null ? '' :
       ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
       + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
@@ -103,6 +103,28 @@ class PathCommand {
 
   toString() {
     return `${this.operator}` + this.operands.join(',');
+  }
+}
+
+exports.Use = class Use {
+  constructor(href, props) {
+    this.href = href;
+    this.fill = props.fill;
+    this.stroke = props.stroke;
+    this.mask = props.mask;
+  }
+
+  toString(numTabs = 0) {
+    return tab.repeat(numTabs) + `<use`
+    + ` href="#${this.href}"`
+    + (this.fill == null ? '' : ` fill="${this.fill}"`)
+    + (this.stroke == null ? '' :
+      ` stroke="${this.stroke.color}" stroke-width="${this.stroke.width}"`
+      + (this.stroke.lineCap === 'butt' ? '' : ` stroke-linecap="${this.stroke.lineCap}"`)
+      + (this.stroke.lineJoin === 'miter' ? '' : ` stroke-linejoin="${this.stroke.lineJoin}"`)
+      + (this.stroke.dash == null ? '' : ` stroke-dasharray="${this.stroke.dash.join(',')}"`))
+    + (this.mask == null ? '' : ` mask="url(#${this.mask})"`)
+    + '/>'
   }
 }
 

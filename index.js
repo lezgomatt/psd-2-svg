@@ -1,5 +1,5 @@
 const Psd = require('psd');
-const { Svg, Path, PathDefinition, Point, Color, Group, GenericElement } = require('./classes');
+const { Svg, Path, PathDefinition, Point, Color, Group, GenericElement, Use } = require('./classes');
 const { PathRecordType, StrokeLineAlignment, StrokeLineCapType, StrokeLineJoinType } = require('./types');
 const { reverse, rotate, roundOff } = require('./utils');
 
@@ -66,46 +66,50 @@ function convertNode(node, state, params) {
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
   if (stroke == null || stroke.alignment === 'center') {
-
-    return new Path({ name: `L${layerNum}_${name}`, hidden, opacity, fill, stroke }, subpaths);
+    return new Path({ name: `L${layerNum}_${name}`, hidden, opacity, fill: fill ?? 'none', stroke }, subpaths);
   } else if (stroke.alignment === 'inside') {
     state.maskCount++;
 
+    let pathId = `M${state.maskCount}_path`;
     let maskId = `M${state.maskCount}_inner_stroke_mask`;
     let newStroke = Object.assign(stroke, { width: stroke.width * 2 } );
 
     let elems = [
       new GenericElement('defs', {}, [
+        new Path({ name: pathId }, subpaths),
         new GenericElement('mask', { id: maskId }, [
           new Path({ fill: Color.White }, subpaths),
+          new Use(pathId, { fill: Color.White }),
         ]),
       ]),
-      new Path({ stroke: newStroke, mask: maskId }, subpaths),
+      new Use(pathId, { fill: 'none', stroke: newStroke, mask: maskId }),
     ];
 
     if (fill != null) {
-      elems.push(new Path({ fill }, subpaths));
+      elems.push(new Use(pathId, { fill }));
     }
 
     return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else if (stroke.alignment === 'outside') {
     state.maskCount++;
 
+    let pathId = `M${state.maskCount}_path`;
     let maskId = `M${state.maskCount}_outer_stroke_mask`;
     let newStroke = Object.assign(stroke, { width: stroke.width * 2 } );
 
     let elems = [
       new GenericElement('defs', {}, [
+        new Path({ name: pathId }, subpaths),
         new GenericElement('mask', { id: maskId }, [
           new GenericElement('rect', { width: params.width, height: params.height, fill: Color.White }),
-          new Path({ fill: Color.Black }, subpaths),
+          new Use(pathId, { fill: Color.Black }),
         ]),
       ]),
-      new Path({ stroke: newStroke, mask: maskId }, subpaths),
+      new Use(pathId, { fill: 'none', stroke: newStroke, mask: maskId }),
     ];
 
     if (fill != null) {
-      elems.push(new Path({ fill }, subpaths));
+      elems.push(new Use(pathId, { fill }));
     }
 
     return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
