@@ -22,14 +22,14 @@ exports.Svg = class Svg {
 exports.Group = class Group {
   constructor(props, children) {
     this.children = children;
-    this.name = props.name;
+    this.id = props.id;
     this.hidden = props.hidden;
     this.opacity = props.opacity;
   }
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<g`
-      + ` id="${this.name}"`
+      + ` id="${this.id}"`
       + (!this.hidden ? '' : ' visibility="hidden"')
       + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
       + '>'
@@ -41,7 +41,7 @@ exports.Group = class Group {
 exports.Path = class Path {
   constructor(props, subpaths) {
     this.subpaths = subpaths;
-    this.name = props.name;
+    this.id = props.id;
     this.hidden = props.hidden;
     this.opacity = props.opacity;
     this.fill = props.fill;
@@ -51,7 +51,7 @@ exports.Path = class Path {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<path`
-    + (this.name == null ? '' : ` id="${this.name}"`)
+    + (this.id == null ? '' : ` id="${this.id}"`)
     + (!this.hidden ? '' : ' visibility="hidden"')
     + (this.opacity == null || this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
     + (this.fill == null ? '' : ` fill="${this.fill}"`)

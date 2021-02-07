@@ -41,7 +41,7 @@ function convertNode(node, state, params) {
     let groupNum = ++state.groupCount;
     let children = convertChildren(node.children(), state, params);
 
-    return new Group({ name: `G${groupNum}_${name}`, hidden, opacity }, children);
+    return new Group({ id: `G${groupNum}_${name}`, hidden, opacity }, children);
   }
 
   let vectorMask = node.get('vectorMask');
@@ -66,7 +66,7 @@ function convertNode(node, state, params) {
   let subpaths = getSubpaths(vectorMask, params.width, params.height);
 
   if (stroke == null || stroke.alignment === 'center') {
-    return new Path({ name: `L${layerNum}_${name}`, hidden, opacity, fill: fill ?? 'none', stroke }, subpaths);
+    return new Path({ id: `L${layerNum}_${name}`, hidden, opacity, fill: fill ?? 'none', stroke }, subpaths);
   } else if (stroke.alignment === 'inside') {
     state.maskCount++;
 
@@ -76,7 +76,7 @@ function convertNode(node, state, params) {
 
     let elems = [
       new GenericElement('defs', {}, [
-        new Path({ name: pathId }, subpaths),
+        new Path({ id: pathId }, subpaths),
         new GenericElement('mask', { id: maskId }, [
           new Path({ fill: Color.White }, subpaths),
           new Use(pathId, { fill: Color.White }),
@@ -89,7 +89,7 @@ function convertNode(node, state, params) {
       elems.push(new Use(pathId, { fill }));
     }
 
-    return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
+    return new Group({ id: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else if (stroke.alignment === 'outside') {
     state.maskCount++;
 
@@ -99,7 +99,7 @@ function convertNode(node, state, params) {
 
     let elems = [
       new GenericElement('defs', {}, [
-        new Path({ name: pathId }, subpaths),
+        new Path({ id: pathId }, subpaths),
         new GenericElement('mask', { id: maskId }, [
           new GenericElement('rect', { width: params.width, height: params.height, fill: Color.White }),
           new Use(pathId, { fill: Color.Black }),
@@ -112,7 +112,7 @@ function convertNode(node, state, params) {
       elems.push(new Use(pathId, { fill }));
     }
 
-    return new Group({ name: `L${layerNum}_${name}`, hidden, opacity }, elems);
+    return new Group({ id: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else {
     throw new Error('Unknown stroke alignment: ' + stroke.alignment);
   }
