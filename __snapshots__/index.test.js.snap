@@ -16,6 +16,17 @@ exports[`converts bed 1`] = `
 </svg>"
 `;
 
+exports[`converts dashes 1`] = `
+"<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
+	<path id=\\"L1_layer_1\\" fill=\\"none\\" stroke=\\"rgb(0, 0, 0)\\" stroke-width=\\"10\\"
+		d=\\"M117 102 C117 102,523.0997 102,523.0997 102\\"/>
+	<path id=\\"L2_layer_1_copy\\" fill=\\"none\\" stroke=\\"rgb(0, 0, 0)\\" stroke-width=\\"10\\" stroke-dasharray=\\"20,10\\"
+		d=\\"M117 232 C117 232,523.0997 232,523.0997 232\\"/>
+	<path id=\\"L3_layer_1_copy_2\\" fill=\\"none\\" stroke=\\"rgb(0, 0, 0)\\" stroke-width=\\"10\\" stroke-linecap=\\"round\\" stroke-dasharray=\\"0,20\\"
+		d=\\"M117 362 C117 362,523.0997 362,523.0997 362\\"/>
+</svg>"
+`;
+
 exports[`converts layers 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
 	<path id=\\"L1_hidden\\" visibility=\\"hidden\\" fill=\\"rgb(115, 46, 240)\\"

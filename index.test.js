@@ -39,3 +39,8 @@ test('converts stroke-pos', () => {
   let svgResult = convertFile('./testdata/stroke-pos.psd').toString();
   expect(svgResult).toMatchSnapshot();
 });
+
+test('converts dashes', () => {
+  let svgResult = convertFile('./testdata/dashes.psd').toString();
+  expect(svgResult).toMatchSnapshot();
+});
