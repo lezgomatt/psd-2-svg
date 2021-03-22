@@ -44,3 +44,8 @@ test('converts dashes', () => {
   let svgResult = convertFile('./testdata/dashes.psd').toString();
   expect(svgResult).toMatchSnapshot();
 });
+
+test('converts special-name', () => {
+  let svgResult = convertFile('./testdata/special-name.psd').toString();
+  expect(svgResult).toMatchSnapshot();
+});

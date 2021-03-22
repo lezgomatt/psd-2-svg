@@ -83,6 +83,13 @@ exports[`converts shapes 1`] = `
 </svg>"
 `;
 
+exports[`converts special-name 1`] = `
+"<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
+	<path id=\\"L1_&quot;&lt;x&apos;s_&amp;_y&apos;s&gt;&quot;\\" fill=\\"rgb(0, 0, 0)\\"
+		d=\\"M270 190 C270 190,370 190,370 190 C370 190,370 290,370 290 C370 290,270 290,270 290 C270 290,270 190,270 190 Z\\"/>
+</svg>"
+`;
+
 exports[`converts stroke-pos 1`] = `
 "<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"640\\" height=\\"480\\">
 	<g id=\\"L1_inside\\">

@@ -29,7 +29,7 @@ exports.Group = class Group {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<g`
-      + ` id="${this.id}"`
+      + ` id="${escape(this.id)}"`
       + (!this.hidden ? '' : ' visibility="hidden"')
       + (this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
       + '>'
@@ -51,7 +51,7 @@ exports.Path = class Path {
 
   toString(numTabs = 0) {
     return tab.repeat(numTabs) + `<path`
-    + (this.id == null ? '' : ` id="${this.id}"`)
+    + (this.id == null ? '' : ` id="${escape(this.id)}"`)
     + (!this.hidden ? '' : ' visibility="hidden"')
     + (this.opacity == null || this.opacity === 1 ? '' : ` opacity="${this.opacity}"`)
     + (this.fill == null ? '' : ` fill="${this.fill}"`)
@@ -138,8 +138,12 @@ exports.GenericElement = class GenericElement {
   strAttrs() {
       let list = [];
 
-      for (const [key, value] of Object.entries(this.attrs)) {
-        list.push(`${key}="${value}"`);
+      for (let [key, value] of Object.entries(this.attrs)) {
+        if (typeof value !== "string") {
+          value = value.toString();
+        }
+
+        list.push(`${key}="${escape(value)}"`);
       }
 
       return list.length <= 0 ? '' : ' ' + list.join(' ');
@@ -180,4 +184,15 @@ exports.Color = class Color {
   toString() {
     return `rgb(${this.r}, ${this.g}, ${this.b})`;
   }
+}
+
+function escape(str) {
+  return (
+      str
+          .replace(/&/g, "&amp;")
+          .replace(/'/g, "&apos;")
+          .replace(/"/g, "&quot;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+  );
 }
