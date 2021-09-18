@@ -16,8 +16,8 @@
     "psd": "^3.2.0"
   },
   "devDependencies": {
-    "esbuild": "^0.8.22",
-    "jest": "^26.6.3"
+    "esbuild": "^0.12.28",
+    "jest": "^27.2.0"
   },
   "browser": {
     "psd": "./external/psd.js"
