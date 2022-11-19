@@ -78,16 +78,11 @@ function convertNode(node, state, params) {
       new GenericElement('defs', {}, [
         new Path({ id: pathId }, subpaths),
         new GenericElement('mask', { id: maskId }, [
-          new Path({ fill: Color.White }, subpaths),
           new Use(pathId, { fill: Color.White }),
         ]),
       ]),
-      new Use(pathId, { fill: 'none', stroke: newStroke, mask: maskId }),
+      new Use(pathId, { fill: fill ?? 'none', stroke: newStroke, mask: maskId }),
     ];
-
-    if (fill != null) {
-      elems.push(new Use(pathId, { fill }));
-    }
 
     return new Group({ id: `L${layerNum}_${name}`, hidden, opacity }, elems);
   } else if (stroke.alignment === 'outside') {
